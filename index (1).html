@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Nómina CCEP</title>
+<!-- Los estilos y las funciones js es mejor tenerlas fuera para poder tenerlo ordenado si crece -->
+<script src="calc.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<h1>Calculadora de Nómina</h1>
+    <center>
+<img src="csif1.jpg" width="400" height="80" />
+        </center>
+
+
+
+<form id="nominaForm">
+    <h3>Días trabajados por categoría: (máximo 30 días naturales)</h3>
+  <center>
+      <H5>
+    <div>
+        <label for="b3">B3:</label>
+        <input type="number" id="b3" name="b3" min="0" max="30" step="1">  
+   
+    
+        <label for="b4">B4:</label>
+        <input type="number" id="b4" name="b4" min="0" max="30" step="1">
+        
+        <label for="c5">C5:</label>
+        <input type="number" id="c5" name="c5" min="0" max="30" step="1">
+        
+        <label for="c6">C6:</label>
+        <input type="number" id="c6" name="c6" min="0" max="30" step="1">
+    </div>
+      </H5>
+    </center>
+
+    <h3>Horas extras por categoría:</h3>
+    <center>
+    <div>
+        
+        <label for="b3HorasDiurnas">Horas Extras B3 &#8594;  Dia:</label>
+        <input type="number" id="b3HorasDiurnas" name="b3HorasDiurnas" min="0" step="1">
+        <label for="b3HorasNocturnas">Noche:</label>
+        <input type="number" id="b3HorasNocturnas" name="b3HorasNocturnas" min="0" step="1">
+        <br />
+          
+    </div>
+    <div>
+      
+        <label for="b4HorasDiurnas">Horas Extras B4  &#8594; Dia:</label>
+        <input type="number" id="b4HorasDiurnas" name="b4HorasDiurnas" min="0" step="1">
+       
+        <label for="b4HorasNocturnas">Noche:</label>
+        <input type="number" id="b4HorasNocturnas" name="b4HorasNocturnas" min="0" step="1">
+        <br />
+    
+    </div>
+           </center>
+    <center>
+    <div>
+        <label for="c5HorasDiurnas">Horas Extras C5  &#8594; Dia:</label>
+        <input type="number" id="c5HorasDiurnas" name="c5HorasDiurnas" min="0" step="1">
+        <label for="c5HorasNocturnas">Noche:</label>
+        <input type="number" id="c5HorasNocturnas" name="c5HorasNocturnas" min="0" step="1">
+        <br />
+ </div>
+ <div>
+        <label for="c6HorasDiurnas">Horas Extras C6  &#8594; Dia:</label>
+        <input type="number" id="c6HorasDiurnas" name="c6HorasDiurnas" min="0" step="1">
+        <label for="c6HorasNocturnas">Noche:</label>
+        <input type="number" id="c6HorasNocturnas" name="c6HorasNocturnas" min="0" step="1">
+    </div>
+        </center>
+
+    <h3>Plus nocturnidad por categoría:</h3>
+    <center>
+    <div>
+        <label for="b3Nocturnos">Días Nocturnos (B3):</label>
+        <input type="number" id="b3Nocturnos" name="b3Nocturnos" min="0" step="1">
+    </div>
+    <div>
+        <label for="b4Nocturnos">Días Nocturnos (B4):</label>
+        <input type="number" id="b4Nocturnos" name="b4Nocturnos" min="0" step="1">
+    </div>
+    <div>
+        <label for="c5Nocturnos">Días Nocturnos (C5):</label>
+        <input type="number" id="c5Nocturnos" name="c5Nocturnos" min="0" step="1">
+    </div>
+    <div>
+        <label for="c6Nocturnos">Días Nocturnos (C6):</label>
+        <input type="number" id="c6Nocturnos" name="c6Nocturnos" min="0" step="1">
+    </div>
+        </center>
+
+    <h3>Días trabajados en fin de semana (12h):</h3>
+  <center>
+    <div>
+        <label for="sabados">Sábados:</label>
+        <input type="number" id="sabados" name="sabados" min="0" step="1">
+   
+        <label for="domingos">Domingos:</label>
+        <input type="number" id="domingos" name="domingos" min="0" step="1">
+    </div>
+  
+    <h3>¿Estás adscrito al 4º turno?</h3>
+    <div>
+        <label for="cuartoTurno">Cuarto turno:</label>
+        <select id="cuartoTurno" name="cuartoTurno">
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+        </select>
+    </div>
+<h3>
+    <div>
+        <input type="submit" value="Calcular Nómina">
+    </div>
+</form>
+
+<div id="resultado"></div>
+
+<h3>Recordar que el sueldo final es en bruto. Este se podrá revisar en la columna izquierda de nuestra nómina.</h3>
+
+<script>
+document.getElementById("nominaForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    calcularNomina();
+});
+
+</script>
+    
+
+
+</body>
+</html>
