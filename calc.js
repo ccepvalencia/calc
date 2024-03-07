@@ -74,10 +74,10 @@ function calcularNomina() {
     resultadoHTML += "<p>Sueldo B4: " + sueldoB4.toFixed(2) + "</p>";
     resultadoHTML += "<p>Sueldo C5: " + sueldoC5.toFixed(2) + "</p>";
     resultadoHTML += "<p>Sueldo C6: " + sueldoC6.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Horas extras B3 (Diurnas): " + horasExtrasB3Diurnas.toFixed(2) + " - (Nocturnas): " + horasExtrasB3Nocturnas.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Horas extras B4 (Diurnas): " + horasExtrasB4Diurnas.toFixed(2) + " - (Nocturnas): " + horasExtrasB4Nocturnas.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Horas extras C5 (Diurnas): " + horasExtrasC5Diurnas.toFixed(2) + " - (Nocturnas): " + horasExtrasC5Nocturnas.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Horas extras C6 (Diurnas): " + horasExtrasC6Diurnas.toFixed(2) + " - (Nocturnas): " + horasExtrasC6Nocturnas.toFixed(2) + "</p>";
+    resultadoHTML += "<p>H.extras B3 	&#8594;	Dia: " + horasExtrasB3Diurnas.toFixed(2) + " - Noche: " + horasExtrasB3Nocturnas.toFixed(2) + "</p>";
+    resultadoHTML += "<p>H.extras B4 	&#8594;	Dia: " + horasExtrasB4Diurnas.toFixed(2) + " - Noche: " + horasExtrasB4Nocturnas.toFixed(2) + "</p>";
+    resultadoHTML += "<p>H.extras C5 	&#8594;	Dia: " + horasExtrasC5Diurnas.toFixed(2) + " - Noche: " + horasExtrasC5Nocturnas.toFixed(2) + "</p>";
+    resultadoHTML += "<p>H.extras C6 	&#8594;	Dia: " + horasExtrasC6Diurnas.toFixed(2) + " - Noche: " + horasExtrasC6Nocturnas.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días nocturnos B3: " + totalNocturnosB3.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días nocturnos B4: " + totalNocturnosB4.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días nocturnos C5: " + totalNocturnosC5.toFixed(2) + "</p>";
