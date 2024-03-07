@@ -59,6 +59,14 @@ function calcularNomina() {
     var totalSabados = sabados * 228.30;
     var totalDomingos = domingos * 260.85;
 
+	//calcular plus asistencia
+	var plusAsistencia = document.getElementById("plusAsistencia").value;
+	var montoPlusAsistencia = 0;
+
+	if (plusAsistencia === "si") {
+    montoPlusAsistencia = 44.01;
+}
+
     // Calcular monto adicional por 4º turno
     var montoCuartoTurno = 0;
     if (cuartoTurno === "si") {
@@ -66,7 +74,7 @@ function calcularNomina() {
     }
 
     // Calcular el total
-    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno;
+    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno + montoPlusAsistencia;
 
     // Mostrar resultados
     var resultadoHTML = "<h3>Resultados:</h3>";
@@ -84,6 +92,7 @@ function calcularNomina() {
     resultadoHTML += "<p>Días nocturnos C6: " + totalNocturnosC6.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días trabajados en Sábado: " + totalSabados.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días trabajados en Domingo: " + totalDomingos.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
     resultadoHTML += "<p>Plus adicional adscripción 4º turno: " + montoCuartoTurno.toFixed(2) + "</p>";
     resultadoHTML += "<h3>Total de la nómina: " + total.toFixed(2) + "€</h3>";
 
