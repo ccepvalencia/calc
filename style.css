@@ -1,6 +1,6 @@
     body {
         background-image: url('cc.jpeg');
-        background-size: courier%;
+        background-size: cover%;
         color: black;
         font-family: ubuntu, sans-serif;
     }
