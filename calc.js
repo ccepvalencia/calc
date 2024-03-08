@@ -129,8 +129,5 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     resultadoHTML += "<p>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
     resultadoHTML += "<h3>Total de la nómina: " + total.toFixed(2) + "€</h3>";
 
-
     document.getElementById("resultado").innerHTML = resultadoHTML;
 }
-
-
