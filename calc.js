@@ -107,6 +107,9 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     resultadoHTML += "<p>Días trabajados en Domingo: " + totalDomingos.toFixed(2) + "</p>";
     resultadoHTML += "<p>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
     resultadoHTML += "<p>Plus adicional adscripción 4º turno: " + montoCuartoTurno.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Arrancadores B3/B4: " + montoArrancadoresB3.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Arrancadores C5: " + montoArrancadoresC5.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Arrancadores C6: " + montoArrancadoresC6.toFixed(2) + "</p>";
     resultadoHTML += "<h3>Total de la nómina: " + total.toFixed(2) + "€</h3>";
 
     document.getElementById("resultado").innerHTML = resultadoHTML;
