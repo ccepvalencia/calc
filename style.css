@@ -31,6 +31,15 @@ h2 { color: white;
         border-radius: 30px;
         border: 2px solid #ccc;
     }
+form id="finaltext"
+{
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 10px;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+    }
+
 	
 	<link rel="stylesheet" type="text/css" href="style.css" />
 
