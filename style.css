@@ -13,7 +13,7 @@ h2 { color: white;
         max-width: 600px;
         margin: 0 auto;
         padding: 20px;
-        background-color: #E20101;
+	linear-gradient(to left,white,red);
         border-radius: 10px;
     }
     input[type="submit"] {
