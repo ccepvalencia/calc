@@ -59,6 +59,20 @@ function calcularNomina() {
     var totalSabados = sabados * 228.30;
     var totalDomingos = domingos * 260.85;
 
+
+var precioSabado8 = 159.81;
+var precioDomingo8 = 182.60;
+
+// Obtener valores de Sábado8 y Domingo8
+var sabado8 = parseInt(document.getElementById("sabado8").value) || 0;
+var domingo8 = parseInt(document.getElementById("domingo8").value) || 0;
+
+// Calcular el monto de Sábado8 y Domingo8
+var montoSabado8 = sabado8 * precioSabado8;
+var montoDomingo8 = domingo8 * precioDomingo8;
+
+
+
 	//calcular plus asistencia
 	var plusAsistencia = document.getElementById("plusAsistencia").value;
 	var montoPlusAsistencia = 0;
@@ -87,7 +101,8 @@ var montoArrancadoresC5 = arrancadoresC5 * precioArrancadorC5;
 var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
 	
     // Calcular el total
-    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno + montoPlusAsistencia + montoArrancadoresB3 + montoArrancadoresC5 + montoArrancadoresC6;;
+    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno + montoPlusAsistencia + montoArrancadoresB3 + montoArrancadoresC5 + montoArrancadoresC6 + montoSabado8 + montoDomingo8;
+
 
     // Mostrar resultados
     var resultadoHTML = "<h3>Resultados:</h3>";
@@ -103,8 +118,10 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     resultadoHTML += "<p>Días nocturnos B4: " + totalNocturnosB4.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días nocturnos C5: " + totalNocturnosC5.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días nocturnos C6: " + totalNocturnosC6.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Días trabajados en Sábado: " + totalSabados.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Días trabajados en Domingo: " + totalDomingos.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Sábados cuarto turno (8h): " + montoSabado8.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Domingos cuarto turno (8): " + montoDomingo8.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Sábados cuarto turno (12h): " + totalSabados.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Domingos cuarto turno (12h): " + totalDomingos.toFixed(2) + "</p>";
     resultadoHTML += "<p>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
     resultadoHTML += "<p>Plus adicional adscripción 4º turno: " + montoCuartoTurno.toFixed(2) + "</p>";
     resultadoHTML += "<p>Arrancadores B3/B4: " + montoArrancadoresB3.toFixed(2) + "</p>";
