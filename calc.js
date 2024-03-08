@@ -72,9 +72,22 @@ function calcularNomina() {
     if (cuartoTurno === "si") {
         montoCuartoTurno = 108.70;
     }
+var precioArrancadorB3 = 20.41;
+var precioArrancadorC5 = 21.87;
+var precioArrancadorC6 = 22.84;
 
+// Obtener valores de los arrancadores
+var arrancadoresB3 = parseInt(document.getElementById("arrancadoresB3").value) || 0;
+var arrancadoresC5 = parseInt(document.getElementById("arrancadoresC5").value) || 0;
+var arrancadoresC6 = parseInt(document.getElementById("arrancadoresC6").value) || 0;
+
+// Calcular el monto de los arrancadores
+var montoArrancadoresB3 = arrancadoresB3 * precioArrancadorB3;
+var montoArrancadoresC5 = arrancadoresC5 * precioArrancadorC5;
+var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
+	
     // Calcular el total
-    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno + montoPlusAsistencia;
+    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno + montoPlusAsistencia + montoArrancadoresB3 + montoArrancadoresC5 + montoArrancadoresC6;;
 
     // Mostrar resultados
     var resultadoHTML = "<h3>Resultados:</h3>";
