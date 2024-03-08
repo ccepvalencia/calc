@@ -133,5 +133,4 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     document.getElementById("resultado").innerHTML = resultadoHTML;
 }
 
-</br>
-	<h4><u>Recordar que el sueldo final es en bruto. Este se podrá revisar en la columna izquierda de nuestra nómina.</u></h4>
+
