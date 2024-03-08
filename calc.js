@@ -119,14 +119,14 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     resultadoHTML += "<p>Días nocturnos C5: " + totalNocturnosC5.toFixed(2) + "</p>";
     resultadoHTML += "<p>Días nocturnos C6: " + totalNocturnosC6.toFixed(2) + "</p>";
     resultadoHTML += "<p>Sábados cuarto turno (8h): " + montoSabado8.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Domingos cuarto turno (8): " + montoDomingo8.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Domingos cuarto turno (8h): " + montoDomingo8.toFixed(2) + "</p>";
     resultadoHTML += "<p>Sábados cuarto turno (12h): " + totalSabados.toFixed(2) + "</p>";
     resultadoHTML += "<p>Domingos cuarto turno (12h): " + totalDomingos.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
     resultadoHTML += "<p>Plus adicional adscripción 4º turno: " + montoCuartoTurno.toFixed(2) + "</p>";
     resultadoHTML += "<p>Arrancadores B3/B4: " + montoArrancadoresB3.toFixed(2) + "</p>";
     resultadoHTML += "<p>Arrancadores C5: " + montoArrancadoresC5.toFixed(2) + "</p>";
-    resultadoHTML += "<p>Arrancadores C6: " + montoArrancadoresC6.toFixed(2) + "</p>";
+    resultadoHTML += "<p>Arrancadores C6: " + montoArrancadoresC6.toFixed(2) + "</p>"; 
+    resultadoHTML += "<p>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
     resultadoHTML += "<h3>Total de la nómina: " + total.toFixed(2) + "€</h3>";
 
     document.getElementById("resultado").innerHTML = resultadoHTML;
