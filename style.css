@@ -23,6 +23,12 @@ h2 {
     margin-bottom: 20px;
 }
 
+h7 {
+    color: red;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
 form {
     background-image: url('cocacola.jpg');
     background-size: cover; /* Ajusta la imagen para cubrir todo el espacio */
