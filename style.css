@@ -63,7 +63,7 @@ input[type="number"] {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    box-sizing: 80%;
+    box-sizing: border-box;
     text-align: center;
 }
  .category-container {
