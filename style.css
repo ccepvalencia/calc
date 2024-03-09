@@ -52,7 +52,20 @@ input[type="number"] {
     box-sizing: border-box;
     text-align: center;
 }
+ .category-container {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
 
+    .category-container div {
+        display: inline-block; /* Muestra los divs en la misma fila */
+        margin: 0 10px; /* Margen entre las categorías */
+    }
+
+    .category-container label,
+    .category-container input {
+        display: inline-block; /* Muestra los labels e inputs en la misma fila */
+        margin-bottom: 5px; /* Espacio entre elementos */
+    }
 
 
 	
