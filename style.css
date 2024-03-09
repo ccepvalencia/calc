@@ -54,7 +54,7 @@ form {
 }
 
 input[type="submit"] {
-    background-color: #EA3815;
+    background-color: #D6C6C2;
     color: #fff;
     padding: 12px 24px;
     border: none;
@@ -98,7 +98,7 @@ input[type="number"] {
 
  /* Estilos para el botón */
     .boton-nomina {
-        background-color: #FF5733; /* Color de fondo rojo */
+        background-color: #F04317; /* Color de fondo rojo */
         color: #fff; /* Color de texto blanco */
         border: none; /* Sin borde */
         padding: 10px 20px; /* Espaciado interno */
@@ -111,7 +111,7 @@ input[type="number"] {
 
     /* Estilos para el botón al pasar el ratón */
     .boton-nomina:hover {
-        background-color: #c0392b; /* Color de fondo rojo más oscuro al pasar el ratón */
+        background-color: #B92803; /* Color de fondo rojo más oscuro al pasar el ratón */
     }
 
 	
