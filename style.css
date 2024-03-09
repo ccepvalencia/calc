@@ -76,6 +76,23 @@ input[type="number"] {
         border-radius: 5px;
     }
 
+ /* Estilos para el botón */
+    .boton-nomina {
+        background-color: #e74c3c; /* Color de fondo rojo */
+        color: #fff; /* Color de texto blanco */
+        border: none; /* Sin borde */
+        padding: 10px 20px; /* Espaciado interno */
+        font-size: 16px; /* Tamaño de fuente */
+        border-radius: 5px; /* Bordes redondeados */
+        cursor: pointer; /* Cambia el cursor al pasar el ratón */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+        transition: background-color 0.3s ease; /* Transición suave para el cambio de color */
+    }
+
+    /* Estilos para el botón al pasar el ratón */
+    .boton-nomina:hover {
+        background-color: #c0392b; /* Color de fondo rojo más oscuro al pasar el ratón */
+    }
 
 	
 	<link rel="stylesheet" type="text/css" href="style.css" />
