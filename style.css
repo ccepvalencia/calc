@@ -66,6 +66,7 @@ input[type="number"] {
     .category-container input {
         display: inline-block; /* Muestra los labels e inputs en la misma fila */
         margin-bottom: 5px; /* Espacio entre elementos */
+	width: 50%;
     }
 
 
