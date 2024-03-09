@@ -129,7 +129,7 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     resultadoHTML += "<p><h9>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
 
     resultadoHTML += "<h8><center>Total de la nómina: " + total.toFixed(2) + "€</center></h8></br>";
-    resultadoHTML += "<h7><u>Recordar que el sueldo final es en bruto. Este se podrá revisar en la columna izquierda de nuestra nómina.</u></h7>";
+    resultadoHTML += "<h7><u>Recordar que el sueldo final es en bruto. Este se podrá revisar en la columna izquierda de nuestra nómina.</u></h7></br>";
     resultadoHTML += "<h9><i>creador Mateo Fernandez</i></h9>";
     
 	document.getElementById("resultado").innerHTML = resultadoHTML;
