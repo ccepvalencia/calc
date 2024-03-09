@@ -127,7 +127,7 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     resultadoHTML += "<p>Arrancadores C5: " + montoArrancadoresC5.toFixed(2) + "</p>";
     resultadoHTML += "<p>Arrancadores C6: " + montoArrancadoresC6.toFixed(2) + "</p>"; 
     resultadoHTML += "<p>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
-    resultadoHTML += "<h3>Total de la nómina: " + total.toFixed(2) + "€</h3>";
+    resultadoHTML += "<h8>Total de la nómina: " + total.toFixed(2) + "€</h8>";
     resultadoHTML += "<h7><u>Recordar que el sueldo final es en bruto. Este se podrá revisar en la columna izquierda de nuestra nómina.</u></h7>";
     
 	document.getElementById("resultado").innerHTML = resultadoHTML;
