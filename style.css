@@ -68,8 +68,9 @@ input[type="number"] {
         margin-bottom: 5px; /* Espacio entre elementos */
 	
 	box-sizing: border-box;
-	width: 20%;
-	border: solid red 1px;
+	width: 30%;
+	padding: 10px;
+	border: 1px solid #ccc;
 	padding: 1px;
     }
 
