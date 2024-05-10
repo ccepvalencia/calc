@@ -99,9 +99,15 @@ var arrancadoresC6 = parseInt(document.getElementById("arrancadoresC6").value) |
 var montoArrancadoresB3 = arrancadoresB3 * precioArrancadorB3;
 var montoArrancadoresC5 = arrancadoresC5 * precioArrancadorC5;
 var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
+
+// Obtener valor de horas de formación
+var horasFormacion = parseInt(document.getElementById("horasFormacion").value) || 0;
+
+// Calcular monto del plus por formación
+var montoPlusFormacion = horasFormacion * 24.76;
 	
     // Calcular el total
-    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno + montoPlusAsistencia + montoArrancadoresB3 + montoArrancadoresC5 + montoArrancadoresC6 + montoSabado8 + montoDomingo8;
+    var total = sueldoB3 + sueldoB4 + sueldoC5 + sueldoC6 + horasExtrasB3Diurnas + horasExtrasB3Nocturnas + horasExtrasB4Diurnas + horasExtrasB4Nocturnas + horasExtrasC5Diurnas + horasExtrasC5Nocturnas + horasExtrasC6Diurnas + horasExtrasC6Nocturnas + totalNocturnosB3 + totalNocturnosB4 + totalNocturnosC5 + totalNocturnosC6 + totalSabados + totalDomingos + montoCuartoTurno + montoPlusAsistencia + montoArrancadoresB3 + montoArrancadoresC5 + montoArrancadoresC6 + montoSabado8 + montoDomingo8 + montoPlusFormacion;
 
 
     // Mostrar resultados
@@ -127,6 +133,7 @@ var montoArrancadoresC6 = arrancadoresC6 * precioArrancadorC6;
     resultadoHTML += "<p><h9>Arrancadores C5: " + montoArrancadoresC5.toFixed(2) + "</p>";
     resultadoHTML += "<p><h9>Arrancadores C6: " + montoArrancadoresC6.toFixed(2) + "</p>"; 
     resultadoHTML += "<p><h9>Plus de asistencia: " + montoPlusAsistencia.toFixed(2) + "</p>";
+    resultadoHTML += "<p><h9>Plus por formación: " + montoPlusFormacion.toFixed(2) + "</p>";
 
     resultadoHTML += "<h8><center>Total de la nómina: " + total.toFixed(2) + "€</center></h8></br>";
     resultadoHTML += "<h7><u>Recordar que el sueldo final es en bruto. Este se podrá revisar en la columna izquierda de nuestra nómina.</u></h7></br>";
