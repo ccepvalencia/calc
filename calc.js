@@ -1,10 +1,10 @@
 function calcularNomina() {
-    const precioB3 = 73.19;
-    const precioB4 = 82.56;
-    const precioC5 = 92.32;
-    const precioC6 = 106.57;
-    const precioCHorasDiurnas = 27.60;
-    const precioCHorasNocturnas = 38.64;
+    const precioB3 = 74.49;
+    const precioB4 = 84.03;
+    const precioC5 = 93.97;
+    const precioC6 = 108.47;
+    const precioCHorasDiurnas = 28.09;
+    const precioCHorasNocturnas = 39.33;
 
     var b3 = parseFloat(document.getElementById("b3").value) || 0;
     var b4 = parseFloat(document.getElementById("b4").value) || 0;
