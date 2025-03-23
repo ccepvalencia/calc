@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cálculo de Nómina Moderno</title>
+    <title>Calculadora de Nómina Moderna</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -124,7 +124,7 @@
         <div class="card-entrance bg-white rounded-xl p-4 shadow-lg transition-all hover:shadow-xl">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Categoría</h3>
             <div class="grid grid-cols-4 gap-2">
-                <button data-categoria="B3" class="py-2 text-sm font-medium rounded-lg bg-red-50 text-red-700 border border-red-200 active">B3</button>
+                <button data-categoria="B3" class="py-2 text-sm font-medium rounded-lg bg-red-50 text-red-700 border border-red-200">B3</button>
                 <button data-categoria="B4" class="py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">B4</button>
                 <button data-categoria="C5" class="py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">C5</button>
                 <button data-categoria="C6" class="py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">C6</button>
@@ -204,11 +204,7 @@
                         <p class="text-xs text-gray-500">44,79€</p>
                     </div>
                     <label class="switch-container cursor-pointer">
-                        <input 
-                            type="checkbox" 
-                            id="plus-asistencia-checkbox" 
-                            class="sr-only peer"
-                        >
+                        <input type="checkbox" id="plus-asistencia-checkbox" class="sr-only peer">
                         <div class="switch-track"></div>
                         <div class="switch-thumb"></div>
                     </label>
@@ -222,11 +218,7 @@
                         <p class="text-xs text-gray-500">110,63€</p>
                     </div>
                     <label class="switch-container cursor-pointer">
-                        <input 
-                            type="checkbox" 
-                            id="adscripcion-checkbox" 
-                            class="sr-only peer"
-                        >
+                        <input type="checkbox" id="adscripcion-checkbox" class="sr-only peer">
                         <div class="switch-track"></div>
                         <div class="switch-thumb"></div>
                     </label>
@@ -420,7 +412,9 @@
 
         function calcularNomina() {
             let totalSalarioBase = 0;
-            let totalComplemento = 0;
+            let totalComplementoNivel = 0;
+            let totalDiferenciasGrupo = 0;
+            let totalDiferenciasNivel = 0;
             let totalHorasExtras = 0;
             let totalHorasNocturnas = 0;
             let total4Turno = 0;
@@ -428,31 +422,35 @@
             let totalPlusAsistencia = 0;
             let detalles = [];
 
-            // Salario base y complemento de nivel salarial (categoría principal)
+            // Salario y complemento de la categoría principal
             const salarioBasePrincipal = salarios[estado.categoria].base;
             const complementoPrincipal = salarios[estado.categoria].complemento;
+            
+            totalSalarioBase = salarioBasePrincipal;
+            totalComplementoNivel = complementoPrincipal;
+            
             detalles.push(`<strong>Categoría Principal (${estado.categoria}):</strong>`);
             detalles.push(`- Salario Base: ${salarioBasePrincipal.toFixed(2)}€`);
             detalles.push(`- Complemento de Nivel Salarial: ${complementoPrincipal.toFixed(2)}€`);
-            totalSalarioBase += salarioBasePrincipal;
-            totalComplemento += complementoPrincipal;
 
-            // Diferencia de grupo y nivel (categorías superiores)
+            // Diferencias por días en categorías superiores
             categoriasSuperiores(estado.categoria).forEach(key => {
                 const dias = estado.diasTrabajados[key];
                 if (dias > 0) {
-                    const salarioBaseOtra = salarios[key].base;
-                    const complementoOtra = salarios[key].complemento;
-                    
-                    const diferenciaGrupo = (salarioBaseOtra - salarioBasePrincipal) / 30 * dias;
-                    const diferenciaNivel = (complementoOtra - complementoPrincipal) / 30 * dias;
+                    const diferenciaGrupo = (salarios[key].base - salarioBasePrincipal) / 30 * dias;
+                    const diferenciaNivel = (salarios[key].complemento - complementoPrincipal) / 30 * dias;
                     
                     detalles.push(`<strong>Días en ${key}: ${dias} días</strong>`);
-                    detalles.push(`- Diferencia de Grupo: ${diferenciaGrupo.toFixed(2)}€`);
-                    detalles.push(`- Diferencia de Nivel: ${diferenciaNivel.toFixed(2)}€`);
                     
-                    totalSalarioBase += diferenciaGrupo;
-                    totalComplemento += diferenciaNivel;
+                    if (diferenciaGrupo > 0) {
+                        detalles.push(`- Diferencia de Grupo: ${diferenciaGrupo.toFixed(2)}€`);
+                        totalDiferenciasGrupo += diferenciaGrupo;
+                    }
+                    
+                    if (diferenciaNivel > 0) {
+                        detalles.push(`- Diferencia de Nivel: ${diferenciaNivel.toFixed(2)}€`);
+                        totalDiferenciasNivel += diferenciaNivel;
+                    }
                 }
             });
 
@@ -496,20 +494,47 @@
                 }
             });
 
-            // 4º Turno (Sábado y Domingo)
-            if (estado.horasSabado8 > 0 || estado.horasSabado12 > 0) {
-                const totalSabado = (estado.horasSabado8 * precioSabado8) + (estado.horasSabado12 * precioSabado12);
+            // 4º Turno - Sábado
+            const horasSabado = {
+                '8': estado.horasSabado8,
+                '12': estado.horasSabado12
+            };
+
+            let totalSabado = 0;
+            if (horasSabado['8'] > 0 || horasSabado['12'] > 0) {
                 detalles.push(`<strong>Sábado (4º Turno):</strong>`);
-                detalles.push(`- 8 horas: ${estado.horasSabado8} x ${precioSabado8.toFixed(2)}€ = ${(estado.horasSabado8 * precioSabado8).toFixed(2)}€`);
-                detalles.push(`- 12 horas: ${estado.horasSabado12} x ${precioSabado12.toFixed(2)}€ = ${(estado.horasSabado12 * precioSabado12).toFixed(2)}€`);
+                
+                Object.entries(horasSabado).forEach(([horas, cantidad]) => {
+                    if (cantidad > 0) {
+                        const precio = horas === '8' ? precioSabado8 : precioSabado12;
+                        const total = cantidad * precio;
+                        detalles.push(`- ${horas} horas: ${cantidad} x ${precio.toFixed(2)}€ = ${total.toFixed(2)}€`);
+                        totalSabado += total;
+                    }
+                });
+                
                 total4Turno += totalSabado;
             }
 
-            if (estado.horasDomingo8 > 0 || estado.horasDomingo12 > 0) {
-                const totalDomingo = (estado.horasDomingo8 * precioDomingo8) + (estado.horasDomingo12 * precioDomingo12);
+            // 4º Turno - Domingo
+            const horasDomingo = {
+                '8': estado.horasDomingo8,
+                '12': estado.horasDomingo12
+            };
+
+            let totalDomingo = 0;
+            if (horasDomingo['8'] > 0 || horasDomingo['12'] > 0) {
                 detalles.push(`<strong>Domingo (4º Turno):</strong>`);
-                detalles.push(`- 8 horas: ${estado.horasDomingo8} x ${precioDomingo8.toFixed(2)}€ = ${(estado.horasDomingo8 * precioDomingo8).toFixed(2)}€`);
-                detalles.push(`- 12 horas: ${estado.horasDomingo12} x ${precioDomingo12.toFixed(2)}€ = ${(estado.horasDomingo12 * precioDomingo12).toFixed(2)}€`);
+                
+                Object.entries(horasDomingo).forEach(([horas, cantidad]) => {
+                    if (cantidad > 0) {
+                        const precio = horas === '8' ? precioDomingo8 : precioDomingo12;
+                        const total = cantidad * precio;
+                        detalles.push(`- ${horas} horas: ${cantidad} x ${precio.toFixed(2)}€ = ${total.toFixed(2)}€`);
+                        totalDomingo += total;
+                    }
+                });
+                
                 total4Turno += totalDomingo;
             }
 
@@ -526,11 +551,27 @@
             }
 
             // Total general
-            const total = totalSalarioBase + totalComplemento + totalHorasExtras + totalHorasNocturnas + total4Turno + totalAdscripcion + totalPlusAsistencia;
-            detalles.push(`<br><strong>Resumen Final:</strong>`);
+            const total = totalSalarioBase + 
+                         totalComplementoNivel + 
+                         totalDiferenciasGrupo + 
+                         totalDiferenciasNivel + 
+                         totalHorasExtras + 
+                         totalHorasNocturnas + 
+                         total4Turno + 
+                         totalAdscripcion + 
+                         totalPlusAsistencia;
             
+            detalles.push(`<br><strong>Resumen Final:</strong>`);
             detalles.push(`- Total Salario Base: ${totalSalarioBase.toFixed(2)}€`);
-            detalles.push(`- Total Complemento de Nivel Salarial: ${totalComplemento.toFixed(2)}€`);
+            detalles.push(`- Complemento de Nivel Salarial: ${totalComplementoNivel.toFixed(2)}€`);
+            
+            if (totalDiferenciasGrupo > 0) {
+                detalles.push(`- Total Diferencias de Grupo: ${totalDiferenciasGrupo.toFixed(2)}€`);
+            }
+            
+            if (totalDiferenciasNivel > 0) {
+                detalles.push(`- Total Diferencias de Nivel: ${totalDiferenciasNivel.toFixed(2)}€`);
+            }
             
             if (totalHorasExtras > 0) {
                 detalles.push(`- Total Horas Extras: ${totalHorasExtras.toFixed(2)}€`);
@@ -575,8 +616,8 @@
 
             document.getElementById('calcular-btn').addEventListener('click', calcularNomina);
 
-            actualizarDiasTrabajados();
-            actualizarHorasExtras();
+            // Inicializar categoría B3
+            cambiarCategoria('B3');
         });
     </script>
 </body>
