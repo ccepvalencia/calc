@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Nómina Moderna</title>
+    <title>Calculadora de Nómina Colebega</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -113,7 +113,7 @@
         <div class="max-w-md mx-auto px-4 py-3">
             <h1 class="text-xl font-bold text-gray-800 text-center">
                 <span class="bg-gradient-to-r from-red-600 to-red-400 bg-clip-text text-transparent">
-                    Calculadora de Nómina
+                    Calculadora de Nómina Colebega
                 </span>
             </h1>
         </div>
@@ -244,7 +244,7 @@
         <div class="bg-white rounded-xl p-6 max-w-sm w-full space-y-4 animate-scale-in">
             <h3 class="text-lg font-semibold text-gray-800">Límite alcanzado</h3>
             <p class="text-gray-600 text-sm">No se pueden superar los 30 días trabajados en categorías superiores.</p>
-            <button onclick="document.getElementById('alerta').classList.add('hidden')" 
+            <button onclick="document.getElementById('alerta').classList.add('hidden')"
                     class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-colors">
                 Entendido
             </button>
@@ -312,24 +312,24 @@
         function actualizarDiasTrabajados() {
             const container = document.getElementById('dias-trabajados-container');
             container.innerHTML = '';
-            
+
             const categorias = categoriasSuperiores(estado.categoria);
-            
+
             if (categorias.length === 0) {
                 container.innerHTML = '<div class="text-center text-gray-400 py-2 text-sm">No hay categorías superiores disponibles</div>';
                 return;
             }
-            
+
             categorias.forEach(cat => {
                 const div = document.createElement('div');
                 div.className = 'flex items-center justify-between py-2';
                 div.innerHTML = `
                     <span class="text-sm text-gray-700">${cat}</span>
                     <div class="flex items-center gap-2">
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8" 
+                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
                             onclick="cambiarDias('${cat}', -1)">-</button>
                         <span class="w-8 text-center font-medium">${estado.diasTrabajados[cat]}</span>
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8" 
+                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
                             onclick="cambiarDias('${cat}', 1)">+</button>
                     </div>
                 `;
@@ -340,9 +340,9 @@
         function actualizarHorasExtras() {
             const container = document.getElementById('horas-extras-container');
             container.innerHTML = '';
-            
+
             const categorias = categoriasOrdenadas(estado.categoria);
-            
+
             categorias.forEach(cat => {
                 const div = document.createElement('div');
                 div.className = 'space-y-3';
@@ -351,20 +351,20 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-gray-50 p-3 rounded-xl">
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="cambiarHorasExtras('${cat}', 'extras', -1)" 
+                                <button onclick="cambiarHorasExtras('${cat}', 'extras', -1)"
                                     class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
                                 <span class="w-12 text-center font-medium">${estado.horasExtras[cat]}</span>
-                                <button onclick="cambiarHorasExtras('${cat}', 'extras', 1)" 
+                                <button onclick="cambiarHorasExtras('${cat}', 'extras', 1)"
                                     class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
                             </div>
                             <p class="text-xs text-gray-500 text-center mt-2">Diurnas</p>
                         </div>
                         <div class="bg-gray-50 p-3 rounded-xl">
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', -1)" 
+                                <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', -1)"
                                     class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
                                 <span class="w-12 text-center font-medium">${estado.horasNocturnas[cat]}</span>
-                                <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', 1)" 
+                                <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', 1)"
                                     class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
                             </div>
                             <p class="text-xs text-gray-500 text-center mt-2">Nocturnas</p>
@@ -378,7 +378,7 @@
         function cambiarDias(categoria, valor) {
             const nuevoValor = Math.max(0, estado.diasTrabajados[categoria] + valor);
             const nuevoTotal = totalDiasTrabajados() - estado.diasTrabajados[categoria] + nuevoValor;
-            
+
             if (nuevoTotal <= 30) {
                 estado.diasTrabajados[categoria] = nuevoValor;
                 actualizarDiasTrabajados();
@@ -403,8 +403,11 @@
 
         function cambiarCategoria(categoria) {
             estado.categoria = categoria;
-            document.querySelectorAll('[data-categoria]').forEach(b => 
-                b.classList.remove('bg-red-50', 'text-red-700', 'border-red-200'));
+            document.querySelectorAll('[data-categoria]').forEach(b => {
+                b.classList.remove('bg-red-50', 'text-red-700', 'border-red-200');
+                b.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+            });
+            document.querySelector(`[data-categoria="${categoria}"]`).classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
             document.querySelector(`[data-categoria="${categoria}"]`).classList.add('bg-red-50', 'text-red-700', 'border-red-200');
             actualizarDiasTrabajados();
             actualizarHorasExtras();
@@ -425,10 +428,10 @@
             // Salario y complemento de la categoría principal
             const salarioBasePrincipal = salarios[estado.categoria].base;
             const complementoPrincipal = salarios[estado.categoria].complemento;
-            
+
             totalSalarioBase = salarioBasePrincipal;
             totalComplementoNivel = complementoPrincipal;
-            
+
             detalles.push(`<strong>Categoría Principal (${estado.categoria}):</strong>`);
             detalles.push(`- Salario Base: ${salarioBasePrincipal.toFixed(2)}€`);
             detalles.push(`- Complemento de Nivel Salarial: ${complementoPrincipal.toFixed(2)}€`);
@@ -439,14 +442,14 @@
                 if (dias > 0) {
                     const diferenciaGrupo = (salarios[key].base - salarioBasePrincipal) / 30 * dias;
                     const diferenciaNivel = (salarios[key].complemento - complementoPrincipal) / 30 * dias;
-                    
+
                     detalles.push(`<strong>Días en ${key}: ${dias} días</strong>`);
-                    
+
                     if (diferenciaGrupo > 0) {
                         detalles.push(`- Diferencia de Grupo: ${diferenciaGrupo.toFixed(2)}€`);
                         totalDiferenciasGrupo += diferenciaGrupo;
                     }
-                    
+
                     if (diferenciaNivel > 0) {
                         detalles.push(`- Diferencia de Nivel: ${diferenciaNivel.toFixed(2)}€`);
                         totalDiferenciasNivel += diferenciaNivel;
@@ -461,10 +464,10 @@
                     const precioBase = preciosExtras[estado.categoria].extra;
                     const precioOtra = preciosExtras[key].extra;
                     const diferenciaPrecio = precioOtra - precioBase;
-                    
+
                     const subtotalBase = horas * precioBase;
                     const subtotalDiferencia = horas * diferenciaPrecio;
-                    
+
                     detalles.push(`<strong>Horas extras en ${key}: ${horas} horas</strong>`);
                     detalles.push(`- Precio base (${estado.categoria}): ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
                     if (key !== estado.categoria) {
@@ -481,10 +484,10 @@
                     const precioBase = preciosExtras[estado.categoria].nocturna;
                     const precioOtra = preciosExtras[key].nocturna;
                     const diferenciaPrecio = precioOtra - precioBase;
-                    
+
                     const subtotalBase = horas * precioBase;
                     const subtotalDiferencia = horas * diferenciaPrecio;
-                    
+
                     detalles.push(`<strong>Horas nocturnas en ${key}: ${horas} horas</strong>`);
                     detalles.push(`- Precio base (${estado.categoria}): ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
                     if (key !== estado.categoria) {
@@ -503,7 +506,7 @@
             let totalSabado = 0;
             if (horasSabado['8'] > 0 || horasSabado['12'] > 0) {
                 detalles.push(`<strong>Sábado (4º Turno):</strong>`);
-                
+
                 Object.entries(horasSabado).forEach(([horas, cantidad]) => {
                     if (cantidad > 0) {
                         const precio = horas === '8' ? precioSabado8 : precioSabado12;
@@ -512,7 +515,7 @@
                         totalSabado += total;
                     }
                 });
-                
+
                 total4Turno += totalSabado;
             }
 
@@ -525,7 +528,7 @@
             let totalDomingo = 0;
             if (horasDomingo['8'] > 0 || horasDomingo['12'] > 0) {
                 detalles.push(`<strong>Domingo (4º Turno):</strong>`);
-                
+
                 Object.entries(horasDomingo).forEach(([horas, cantidad]) => {
                     if (cantidad > 0) {
                         const precio = horas === '8' ? precioDomingo8 : precioDomingo12;
@@ -534,7 +537,7 @@
                         totalDomingo += total;
                     }
                 });
-                
+
                 total4Turno += totalDomingo;
             }
 
@@ -551,48 +554,48 @@
             }
 
             // Total general
-            const total = totalSalarioBase + 
-                         totalComplementoNivel + 
-                         totalDiferenciasGrupo + 
-                         totalDiferenciasNivel + 
-                         totalHorasExtras + 
-                         totalHorasNocturnas + 
-                         total4Turno + 
-                         totalAdscripcion + 
-                         totalPlusAsistencia;
-            
+            const total = totalSalarioBase +
+                          totalComplementoNivel +
+                          totalDiferenciasGrupo +
+                          totalDiferenciasNivel +
+                          totalHorasExtras +
+                          totalHorasNocturnas +
+                          total4Turno +
+                          totalAdscripcion +
+                          totalPlusAsistencia;
+
             detalles.push(`<br><strong>Resumen Final:</strong>`);
             detalles.push(`- Total Salario Base: ${totalSalarioBase.toFixed(2)}€`);
             detalles.push(`- Complemento de Nivel Salarial: ${totalComplementoNivel.toFixed(2)}€`);
-            
+
             if (totalDiferenciasGrupo > 0) {
                 detalles.push(`- Total Diferencias de Grupo: ${totalDiferenciasGrupo.toFixed(2)}€`);
             }
-            
+
             if (totalDiferenciasNivel > 0) {
                 detalles.push(`- Total Diferencias de Nivel: ${totalDiferenciasNivel.toFixed(2)}€`);
             }
-            
+
             if (totalHorasExtras > 0) {
                 detalles.push(`- Total Horas Extras: ${totalHorasExtras.toFixed(2)}€`);
             }
-            
+
             if (totalHorasNocturnas > 0) {
                 detalles.push(`- Total Horas Nocturnas: ${totalHorasNocturnas.toFixed(2)}€`);
             }
-            
+
             if (total4Turno > 0) {
                 detalles.push(`- Total 4º Turno: ${total4Turno.toFixed(2)}€`);
             }
-            
+
             if (totalPlusAsistencia > 0) {
                 detalles.push(`- Plus de asistencia: ${totalPlusAsistencia.toFixed(2)}€`);
             }
-            
+
             if (totalAdscripcion > 0) {
                 detalles.push(`- Adscripción al fin de semana: ${totalAdscripcion.toFixed(2)}€`);
             }
-            
+
             detalles.push(`<div class="text-red-600 font-bold mt-2">Total General: ${total.toFixed(2)}€</div>`);
 
             document.getElementById('resultado').innerHTML = detalles.join('<br>');
@@ -609,7 +612,7 @@
             document.getElementById('plus-asistencia-checkbox').addEventListener('change', function() {
                 estado.plusAsistencia = this.checked;
             });
-            
+
             document.getElementById('adscripcion-checkbox').addEventListener('change', function() {
                 estado.adscripcionFinDeSemana = this.checked;
             });
