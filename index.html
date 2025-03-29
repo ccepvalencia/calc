@@ -131,7 +131,7 @@
             </div>
         </div>
 
-        <!-- Días Trabajados como categoria superior -->
+        <!-- Días Trabajados -->
         <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Días Trabajados como categoría superior</h3>
             <div id="dias-trabajados-container" class="space-y-3"></div>
@@ -141,6 +141,31 @@
         <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Nocturnidad (días de noche)</h3>
             <div id="nocturnidad-container" class="space-y-3"></div>
+        </div>
+
+        <!-- Arrancadores -->
+        <div id="arrancadores-section" class="card-entrance bg-white rounded-xl p-4 shadow-lg hidden">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Arrancadores</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-700">Arrancador C5</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="cambiarArrancador('C5', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
+                        <span id="arrancador-C5" class="w-8 text-center font-medium">0</span>
+                        <button onclick="cambiarArrancador('C5', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                    </div>
+                    <span class="text-xs text-gray-500">22,26€/ud</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-700">Arrancador C6</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="cambiarArrancador('C6', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
+                        <span id="arrancador-C6" class="w-8 text-center font-medium">0</span>
+                        <button onclick="cambiarArrancador('C6', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                    </div>
+                    <span class="text-xs text-gray-500">23,25€/ud</span>
+                </div>
+            </div>
         </div>
 
         <!-- Horas Extras -->
@@ -262,6 +287,7 @@
             categoria: "B3",
             diasTrabajados: { "B4": 0, "C5": 0, "C6": 0 },
             nocturnidad: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
+            arrancadores: { "C5": 0, "C6": 0 },
             horasExtras: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
             horasNocturnas: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
             horasSabado8: 0,
@@ -287,10 +313,15 @@
         };
 
         const preciosNocturnidad = {
-            "B3": 29.27,
-            "B4": 33.03,
-            "C5": 36.93,
-            "C6": 42.63
+            "B3": 29.79,
+            "B4": 33.62,
+            "C5": 37.59,
+            "C6": 43.39
+        };
+
+        const preciosArrancadores = {
+            "C5": 22.26,
+            "C6": 23.25
         };
 
         const precioSabado8 = 153.36;
@@ -321,6 +352,18 @@
 
         function totalDiasTrabajados() {
             return Object.values(estado.diasTrabajados).reduce((a, b) => a + b, 0);
+        }
+
+        function verificarMostrarArrancadores() {
+            const esC5C6 = estado.categoria === "C5" || estado.categoria === "C6";
+            const tieneDiasC5C6 = estado.diasTrabajados["C5"] > 0 || estado.diasTrabajados["C6"] > 0;
+            
+            const seccion = document.getElementById('arrancadores-section');
+            if (esC5C6 || tieneDiasC5C6) {
+                seccion.classList.remove('hidden');
+            } else {
+                seccion.classList.add('hidden');
+            }
         }
 
         function actualizarDiasTrabajados() {
@@ -419,6 +462,7 @@
             if (nuevoTotal <= 30) {
                 estado.diasTrabajados[categoria] = nuevoValor;
                 actualizarDiasTrabajados();
+                verificarMostrarArrancadores();
             } else {
                 document.getElementById('alerta').classList.remove('hidden');
             }
@@ -427,6 +471,11 @@
         function cambiarNocturnidad(categoria, valor) {
             estado.nocturnidad[categoria] = Math.max(0, estado.nocturnidad[categoria] + valor);
             actualizarNocturnidad();
+        }
+
+        function cambiarArrancador(tipo, valor) {
+            estado.arrancadores[tipo] = Math.max(0, estado.arrancadores[tipo] + valor);
+            document.getElementById(`arrancador-${tipo}`).textContent = estado.arrancadores[tipo];
         }
 
         function cambiarHorasExtras(categoria, tipo, valor) {
@@ -454,6 +503,7 @@
             actualizarDiasTrabajados();
             actualizarNocturnidad();
             actualizarHorasExtras();
+            verificarMostrarArrancadores();
         }
 
         function calcularNomina() {
@@ -467,6 +517,7 @@
             let totalAdscripcion = 0;
             let totalPlusAsistencia = 0;
             let totalNocturnidad = 0;
+            let totalArrancadores = 0;
             let detalles = [];
 
             // Salario y complemento de la categoría principal
@@ -510,6 +561,17 @@
                     
                     detalles.push(`<strong>Nocturnidad ${cat}:</strong> ${dias} días x ${precio.toFixed(2)}€ = ${subtotal.toFixed(2)}€`);
                     totalNocturnidad += subtotal;
+                }
+            });
+
+            // Arrancadores
+            Object.entries(estado.arrancadores).forEach(([tipo, cantidad]) => {
+                if (cantidad > 0) {
+                    const precio = preciosArrancadores[tipo];
+                    const subtotal = cantidad * precio;
+                    
+                    detalles.push(`<strong>Arrancador ${tipo}:</strong> ${cantidad} x ${precio.toFixed(2)}€ = ${subtotal.toFixed(2)}€`);
+                    totalArrancadores += subtotal;
                 }
             });
 
@@ -619,7 +681,8 @@
                           total4Turno +
                           totalAdscripcion +
                           totalPlusAsistencia +
-                          totalNocturnidad;
+                          totalNocturnidad +
+                          totalArrancadores;
 
             detalles.push(`<br><strong>Resumen Final:</strong>`);
             detalles.push(`- Total Salario Base: ${totalSalarioBase.toFixed(2)}€`);
@@ -635,6 +698,10 @@
 
             if (totalNocturnidad > 0) {
                 detalles.push(`- Total Nocturnidad: ${totalNocturnidad.toFixed(2)}€`);
+            }
+
+            if (totalArrancadores > 0) {
+                detalles.push(`- Total Arrancadores: ${totalArrancadores.toFixed(2)}€`);
             }
 
             if (totalHorasExtras > 0) {
