@@ -726,7 +726,7 @@ html {
                 detalles.push(`- Adscripción al fin de semana: ${totalAdscripcion.toFixed(2)}€`);
             }
 
-            detalles.push(`<div class="text-red-600 font-bold mt-2">Total General: ${total.toFixed(2)}€</div>`);
+            detalles.push(`<div class="text-red-600 font-bold mt-2">Total General (bruto): ${total.toFixed(2)}€</div>`);
 
             document.getElementById('resultado').innerHTML = detalles.join('<br>');
             document.getElementById('resultado-container').classList.remove('hidden');
