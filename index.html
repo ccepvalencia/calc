@@ -149,7 +149,7 @@ html {
         <div id="arrancadores-section" class="card-entrance bg-white rounded-xl p-4 shadow-lg hidden">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Arrancadores</h3>
             <div class="space-y-4">
-                <div class="flex items-center justify-between">
+                <div id="arrancador-c5-container" class="flex items-center justify-between">
                     <span class="text-sm text-gray-700">Arrancador C5</span>
                     <div class="flex items-center gap-2">
                         <button onclick="cambiarArrancador('C5', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
@@ -361,8 +361,16 @@ html {
             const tieneDiasC5C6 = estado.diasTrabajados["C5"] > 0 || estado.diasTrabajados["C6"] > 0;
             
             const seccion = document.getElementById('arrancadores-section');
+            const arrancadorC5 = document.getElementById('arrancador-c5-container');
+            
             if (esC5C6 || tieneDiasC5C6) {
                 seccion.classList.remove('hidden');
+                // Ocultar C5 solo si la categoría es C6
+                if (estado.categoria === "C6") {
+                    arrancadorC5.classList.add('hidden');
+                } else {
+                    arrancadorC5.classList.remove('hidden');
+                }
             } else {
                 seccion.classList.add('hidden');
             }
