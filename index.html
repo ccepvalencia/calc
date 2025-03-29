@@ -137,6 +137,12 @@
             <div id="dias-trabajados-container" class="space-y-3"></div>
         </div>
 
+        <!-- Nocturnidad -->
+        <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Nocturnidad (días de noche)</h3>
+            <div id="nocturnidad-container" class="space-y-3"></div>
+        </div>
+
         <!-- Horas Extras -->
         <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Horas Extras</h3>
@@ -255,6 +261,7 @@
         let estado = {
             categoria: "B3",
             diasTrabajados: { "B4": 0, "C5": 0, "C6": 0 },
+            nocturnidad: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
             horasExtras: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
             horasNocturnas: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
             horasSabado8: 0,
@@ -277,6 +284,13 @@
             "B4": { extra: 26.86, nocturna: 37.60 },
             "C5": { extra: 28.09, nocturna: 39.33 },
             "C6": { extra: 28.09, nocturna: 39.33 }
+        };
+
+        const preciosNocturnidad = {
+            "B3": 29.27,
+            "B4": 33.03,
+            "C5": 36.93,
+            "C6": 42.63
         };
 
         const precioSabado8 = 153.36;
@@ -337,6 +351,29 @@
             });
         }
 
+        function actualizarNocturnidad() {
+            const container = document.getElementById('nocturnidad-container');
+            container.innerHTML = '';
+
+            const categorias = categoriasOrdenadas(estado.categoria);
+
+            categorias.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between py-2';
+                div.innerHTML = `
+                    <span class="text-sm text-gray-700">${cat}</span>
+                    <div class="flex items-center gap-2">
+                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                            onclick="cambiarNocturnidad('${cat}', -1)">-</button>
+                        <span class="w-8 text-center font-medium">${estado.nocturnidad[cat]}</span>
+                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                            onclick="cambiarNocturnidad('${cat}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
         function actualizarHorasExtras() {
             const container = document.getElementById('horas-extras-container');
             container.innerHTML = '';
@@ -387,6 +424,11 @@
             }
         }
 
+        function cambiarNocturnidad(categoria, valor) {
+            estado.nocturnidad[categoria] = Math.max(0, estado.nocturnidad[categoria] + valor);
+            actualizarNocturnidad();
+        }
+
         function cambiarHorasExtras(categoria, tipo, valor) {
             if (tipo === 'extras') {
                 estado.horasExtras[categoria] = Math.max(0, estado.horasExtras[categoria] + valor);
@@ -410,6 +452,7 @@
             document.querySelector(`[data-categoria="${categoria}"]`).classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
             document.querySelector(`[data-categoria="${categoria}"]`).classList.add('bg-red-50', 'text-red-700', 'border-red-200');
             actualizarDiasTrabajados();
+            actualizarNocturnidad();
             actualizarHorasExtras();
         }
 
@@ -423,6 +466,7 @@
             let total4Turno = 0;
             let totalAdscripcion = 0;
             let totalPlusAsistencia = 0;
+            let totalNocturnidad = 0;
             let detalles = [];
 
             // Salario y complemento de la categoría principal
@@ -454,6 +498,18 @@
                         detalles.push(`- Diferencia de Nivel: ${diferenciaNivel.toFixed(2)}€`);
                         totalDiferenciasNivel += diferenciaNivel;
                     }
+                }
+            });
+
+            // Nocturnidad
+            categoriasOrdenadas(estado.categoria).forEach(cat => {
+                const dias = estado.nocturnidad[cat];
+                if (dias > 0) {
+                    const precio = preciosNocturnidad[cat];
+                    const subtotal = dias * precio;
+                    
+                    detalles.push(`<strong>Nocturnidad ${cat}:</strong> ${dias} días x ${precio.toFixed(2)}€ = ${subtotal.toFixed(2)}€`);
+                    totalNocturnidad += subtotal;
                 }
             });
 
@@ -562,7 +618,8 @@
                           totalHorasNocturnas +
                           total4Turno +
                           totalAdscripcion +
-                          totalPlusAsistencia;
+                          totalPlusAsistencia +
+                          totalNocturnidad;
 
             detalles.push(`<br><strong>Resumen Final:</strong>`);
             detalles.push(`- Total Salario Base: ${totalSalarioBase.toFixed(2)}€`);
@@ -574,6 +631,10 @@
 
             if (totalDiferenciasNivel > 0) {
                 detalles.push(`- Total Diferencias de Nivel: ${totalDiferenciasNivel.toFixed(2)}€`);
+            }
+
+            if (totalNocturnidad > 0) {
+                detalles.push(`- Total Nocturnidad: ${totalNocturnidad.toFixed(2)}€`);
             }
 
             if (totalHorasExtras > 0) {
