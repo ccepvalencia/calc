@@ -287,7 +287,7 @@
         <!-- Horas Extras -->
         <div id="horas-extras-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Horas Extras</h3>
-            <div class="space-y-4"></div>
+            <div class="space-y-4" id="horas-extras-content"></div>
         </div>
 
         <!-- 4º Turno -->
@@ -617,7 +617,7 @@
         }
 
         function actualizarHorasExtras() {
-            const container = document.getElementById('horas-extras-container');
+            const container = document.getElementById('horas-extras-content');
             container.innerHTML = '';
 
             const categorias = categoriasOrdenadas(estado.categoria);
@@ -979,6 +979,7 @@
             // Inicializar categoría B3
             cambiarCategoria('B3');
             actualizarDiasPorCategoria();
+            actualizarHorasExtras(); // Asegurarse de que las horas extras se muestran al cargar
         });
     </script>
 </body>
