@@ -7,14 +7,116 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-html {
-    touch-action: manipulation;
-}
+        
+        :root {
+            --rojo: #ef4444;
+            --rojo-oscuro: #dc2626;
+            --verde: #10b981;
+            --verde-oscuro: #059669;
+            --gris-oscuro: #1f2937;
+            --gris-claro: #f3f4f6;
+        }
+        
+        html {
+            touch-action: manipulation;
+        }
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #111827;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-rojo {
+            background-color: var(--rojo);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-rojo:hover {
+            background-color: var(--rojo-oscuro);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-verde {
+            background-color: var(--verde);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-verde:hover {
+            background-color: var(--verde-oscuro);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+        
+        .categoria-activa {
+            background-color: var(--rojo);
+            color: white;
+        }
+        
+        .stepper-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .stepper-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .stepper-input {
+            width: 50px;
+            text-align: center;
+            font-weight: 600;
+            -moz-appearance: textfield;
+            border: none;
+            background-color: #f3f4f6;
+            border-radius: 8px;
+        }
+        
+        .stepper-input::-webkit-outer-spin-button,
+        .stepper-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .texto-verde {
+            color: var(--verde);
+        }
+        
+        .texto-rojo {
+            color: var(--rojo);
+        }
+        
+        .bg-rojo-suave {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        
+        .bg-verde-suave {
+            background-color: rgba(16, 185, 129, 0.1);
         }
 
+        /* Existing animations and other styles */
         .card-entrance {
             animation: cardEntrance 0.6s ease-out;
         }
@@ -93,22 +195,6 @@ html {
             transform: translateX(calc(var(--switch-width) - var(--thumb-size) - 6px));
         }
 
-        .stepper-input {
-            width: 40px;
-            text-align: center;
-            -moz-appearance: textfield;
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            font-weight: 500;
-        }
-
-        .stepper-input::-webkit-outer-spin-button,
-        .stepper-input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
         .mes-incompleto-container {
             transition: all 0.3s ease;
         }
@@ -180,18 +266,18 @@ html {
                 <div id="arrancador-c5-container" class="flex items-center justify-between">
                     <span class="text-sm text-gray-700">Arrancador C5</span>
                     <div class="flex items-center gap-2">
-                        <button onclick="cambiarArrancador('C5', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
+                        <button onclick="cambiarArrancador('C5', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
                         <span id="arrancador-C5" class="w-8 text-center font-medium">0</span>
-                        <button onclick="cambiarArrancador('C5', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                        <button onclick="cambiarArrancador('C5', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
                     </div>
                     <span class="text-xs text-gray-500">22,26€/dia</span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-sm text-gray-700">Arrancador C6</span>
                     <div class="flex items-center gap-2">
-                        <button onclick="cambiarArrancador('C6', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
+                        <button onclick="cambiarArrancador('C6', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
                         <span id="arrancador-C6" class="w-8 text-center font-medium">0</span>
-                        <button onclick="cambiarArrancador('C6', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                        <button onclick="cambiarArrancador('C6', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
                     </div>
                     <span class="text-xs text-gray-500">23,25€/dia</span>
                 </div>
@@ -212,20 +298,20 @@ html {
                 <div class="space-y-2">
                     <h4 class="text-sm font-medium text-center text-gray-700">Sábado</h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-gray-50 p-3 rounded-xl text-center">
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
                             <p class="text-xs text-gray-500 mb-2">8 Horas</p>
-                            <div class="flex items-center justify-center gap-1">
-                                <button onclick="cambiarHoras('horasSabado8', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
-                                <input type="number" id="horasSabado8" class="stepper-input bg-gray-100 h-8" value="0" readonly>
-                                <button onclick="cambiarHoras('horasSabado8', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasSabado8', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasSabado8" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasSabado8', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
                             </div>
                         </div>
-                        <div class="bg-gray-50 p-3 rounded-xl text-center">
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
                             <p class="text-xs text-gray-500 mb-2">12 Horas</p>
-                            <div class="flex items-center justify-center gap-1">
-                                <button onclick="cambiarHoras('horasSabado12', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
-                                <input type="number" id="horasSabado12" class="stepper-input bg-gray-100 h-8" value="0" readonly>
-                                <button onclick="cambiarHoras('horasSabado12', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasSabado12', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasSabado12" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasSabado12', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
                             </div>
                         </div>
                     </div>
@@ -235,20 +321,20 @@ html {
                 <div class="space-y-2">
                     <h4 class="text-sm font-medium text-center text-gray-700">Domingo</h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-gray-50 p-3 rounded-xl text-center">
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
                             <p class="text-xs text-gray-500 mb-2">8 Horas</p>
-                            <div class="flex items-center justify-center gap-1">
-                                <button onclick="cambiarHoras('horasDomingo8', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
-                                <input type="number" id="horasDomingo8" class="stepper-input bg-gray-100 h-8" value="0" readonly>
-                                <button onclick="cambiarHoras('horasDomingo8', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasDomingo8', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasDomingo8" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasDomingo8', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
                             </div>
                         </div>
-                        <div class="bg-gray-50 p-3 rounded-xl text-center">
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
                             <p class="text-xs text-gray-500 mb-2">12 Horas</p>
-                            <div class="flex items-center justify-center gap-1">
-                                <button onclick="cambiarHoras('horasDomingo12', -1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
-                                <input type="number" id="horasDomingo12" class="stepper-input bg-gray-100 h-8" value="0" readonly>
-                                <button onclick="cambiarHoras('horasDomingo12', 1)" class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasDomingo12', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasDomingo12" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasDomingo12', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
                             </div>
                         </div>
                     </div>
@@ -451,10 +537,10 @@ html {
                 div.innerHTML = `
                     <span class="text-sm text-gray-700">${cat}</span>
                     <div class="flex items-center gap-2">
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                        <button class="stepper-btn bg-rojo-suave texto-rojo"
                             onclick="cambiarDiasPorCategoria('${cat}', -1)">-</button>
                         <span class="w-8 text-center font-medium">${dias}</span>
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                        <button class="stepper-btn bg-verde-suave texto-verde"
                             onclick="cambiarDiasPorCategoria('${cat}', 1)">+</button>
                     </div>
                 `;
@@ -469,7 +555,7 @@ html {
         function cambiarDiasPorCategoria(categoria, valor) {
             const nuevoValor = Math.max(0, estado.diasPorCategoria[categoria] + valor);
             const nuevoTotal = Object.values(estado.diasPorCategoria).reduce((a, b) => a + b, 0) 
-                            - estado.diasPorCategoria[categoria] + nuevoValor;
+                                - estado.diasPorCategoria[categoria] + nuevoValor;
             
             if (nuevoTotal <= 30) {
                 estado.diasPorCategoria[categoria] = nuevoValor;
@@ -496,10 +582,10 @@ html {
                 div.innerHTML = `
                     <span class="text-sm text-gray-700">${cat}</span>
                     <div class="flex items-center gap-2">
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                        <button class="stepper-btn bg-rojo-suave texto-rojo"
                             onclick="cambiarDias('${cat}', -1)">-</button>
                         <span class="w-8 text-center font-medium">${estado.diasTrabajados[cat]}</span>
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                        <button class="stepper-btn bg-verde-suave texto-verde"
                             onclick="cambiarDias('${cat}', 1)">+</button>
                     </div>
                 `;
@@ -519,10 +605,10 @@ html {
                 div.innerHTML = `
                     <span class="text-sm text-gray-700">${cat}</span>
                     <div class="flex items-center gap-2">
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                        <button class="stepper-btn bg-rojo-suave texto-rojo"
                             onclick="cambiarNocturnidad('${cat}', -1)">-</button>
                         <span class="w-8 text-center font-medium">${estado.nocturnidad[cat]}</span>
-                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                        <button class="stepper-btn bg-verde-suave texto-verde"
                             onclick="cambiarNocturnidad('${cat}', 1)">+</button>
                     </div>
                 `;
@@ -545,20 +631,20 @@ html {
                         <div class="bg-gray-50 p-3 rounded-xl">
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="cambiarHorasExtras('${cat}', 'extras', -1)"
-                                    class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
+                                    class="stepper-btn bg-rojo-suave texto-rojo">-</button>
                                 <span class="w-12 text-center font-medium">${estado.horasExtras[cat]}</span>
                                 <button onclick="cambiarHorasExtras('${cat}', 'extras', 1)"
-                                    class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                                    class="stepper-btn bg-verde-suave texto-verde">+</button>
                             </div>
                             <p class="text-xs text-gray-500 text-center mt-2">Diurnas</p>
                         </div>
                         <div class="bg-gray-50 p-3 rounded-xl">
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', -1)"
-                                    class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">-</button>
+                                    class="stepper-btn bg-rojo-suave texto-rojo">-</button>
                                 <span class="w-12 text-center font-medium">${estado.horasNocturnas[cat]}</span>
                                 <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', 1)"
-                                    class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8">+</button>
+                                    class="stepper-btn bg-verde-suave texto-verde">+</button>
                             </div>
                             <p class="text-xs text-gray-500 text-center mt-2">Nocturnas</p>
                         </div>
