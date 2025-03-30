@@ -108,6 +108,10 @@ html {
             -webkit-appearance: none;
             margin: 0;
         }
+
+        .mes-incompleto-container {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -123,7 +127,7 @@ html {
 
     <main class="max-w-md mx-auto px-4 py-6 space-y-6">
         <!-- Categoría -->
-        <div class="card-entrance bg-white rounded-xl p-4 shadow-lg transition-all hover:shadow-xl">
+        <div data-categoria-container class="card-entrance bg-white rounded-xl p-4 shadow-lg transition-all hover:shadow-xl">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Categoría base</h3>
             <div class="grid grid-cols-4 gap-2">
                 <button data-categoria="B3" class="py-2 text-sm font-medium rounded-lg bg-red-50 text-red-700 border border-red-200">B3</button>
@@ -133,16 +137,40 @@ html {
             </div>
         </div>
 
-        <!-- Días Trabajados -->
+        <!-- Mes Incompleto -->
         <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700">Calcular mes incompleto</h3>
+                    <p class="text-xs text-gray-500">Activar para introducir días sueltos por categoría</p>
+                </div>
+                <label class="switch-container cursor-pointer">
+                    <input type="checkbox" id="mes-incompleto-checkbox" class="sr-only peer">
+                    <div class="switch-track"></div>
+                    <div class="switch-thumb"></div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Días por categoría (mes incompleto) -->
+        <div id="dias-por-categoria-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg mt-4 hidden mes-incompleto-container">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Días trabajados por categoría</h3>
+            <div class="space-y-3" id="dias-por-categoria-list"></div>
+            <div class="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-700">
+                Total días: <span id="total-dias-mes-incompleto" class="font-medium">0</span>/30
+            </div>
+        </div>
+
+        <!-- Días Trabajados -->
+        <div id="dias-trabajados-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Días Trabajados como categoría superior</h3>
-            <div id="dias-trabajados-container" class="space-y-3"></div>
+            <div class="space-y-3"></div>
         </div>
 
         <!-- Nocturnidad -->
-        <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+        <div id="nocturnidad-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Nocturnidad (días de noche)</h3>
-            <div id="nocturnidad-container" class="space-y-3"></div>
+            <div class="space-y-3"></div>
         </div>
 
         <!-- Arrancadores -->
@@ -171,9 +199,9 @@ html {
         </div>
 
         <!-- Horas Extras -->
-        <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+        <div id="horas-extras-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Horas Extras</h3>
-            <div id="horas-extras-container" class="space-y-4"></div>
+            <div class="space-y-4"></div>
         </div>
 
         <!-- 4º Turno -->
@@ -287,6 +315,8 @@ html {
     <script>
         let estado = {
             categoria: "B3",
+            mesIncompleto: false,
+            diasPorCategoria: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
             diasTrabajados: { "B4": 0, "C5": 0, "C6": 0 },
             nocturnidad: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
             arrancadores: { "C5": 0, "C6": 0 },
@@ -376,8 +406,81 @@ html {
             }
         }
 
+        function toggleMesIncompleto() {
+            estado.mesIncompleto = !estado.mesIncompleto;
+            actualizarVistaMesIncompleto();
+        }
+
+        function actualizarVistaMesIncompleto() {
+            const checkbox = document.getElementById('mes-incompleto-checkbox');
+            checkbox.checked = estado.mesIncompleto;
+            
+            const categoriasContainer = document.querySelector('[data-categoria-container]');
+            const diasPorCategoriaContainer = document.getElementById('dias-por-categoria-container');
+            const diasTrabajadosContainer = document.getElementById('dias-trabajados-container');
+            
+            if (estado.mesIncompleto) {
+                categoriasContainer.classList.add('hidden');
+                diasPorCategoriaContainer.classList.remove('hidden');
+                diasTrabajadosContainer.classList.add('hidden');
+                // Reiniciar días trabajados en categorías superiores
+                Object.keys(estado.diasTrabajados).forEach(key => {
+                    estado.diasTrabajados[key] = 0;
+                });
+                actualizarDiasTrabajados();
+                actualizarDiasPorCategoria();
+            } else {
+                categoriasContainer.classList.remove('hidden');
+                diasPorCategoriaContainer.classList.add('hidden');
+                diasTrabajadosContainer.classList.remove('hidden');
+                // Reiniciar días por categoría
+                Object.keys(estado.diasPorCategoria).forEach(key => {
+                    estado.diasPorCategoria[key] = 0;
+                });
+                actualizarDiasPorCategoria();
+            }
+        }
+
+        function actualizarDiasPorCategoria() {
+            const container = document.getElementById('dias-por-categoria-list');
+            container.innerHTML = '';
+            
+            Object.entries(estado.diasPorCategoria).forEach(([cat, dias]) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between py-2';
+                div.innerHTML = `
+                    <span class="text-sm text-gray-700">${cat}</span>
+                    <div class="flex items-center gap-2">
+                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                            onclick="cambiarDiasPorCategoria('${cat}', -1)">-</button>
+                        <span class="w-8 text-center font-medium">${dias}</span>
+                        <button class="stepper-button bg-white text-red-600 rounded-lg shadow-md hover:shadow-lg w-8 h-8"
+                            onclick="cambiarDiasPorCategoria('${cat}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            
+            // Actualizar total de días
+            const total = Object.values(estado.diasPorCategoria).reduce((a, b) => a + b, 0);
+            document.getElementById('total-dias-mes-incompleto').textContent = total;
+        }
+
+        function cambiarDiasPorCategoria(categoria, valor) {
+            const nuevoValor = Math.max(0, estado.diasPorCategoria[categoria] + valor);
+            const nuevoTotal = Object.values(estado.diasPorCategoria).reduce((a, b) => a + b, 0) 
+                            - estado.diasPorCategoria[categoria] + nuevoValor;
+            
+            if (nuevoTotal <= 30) {
+                estado.diasPorCategoria[categoria] = nuevoValor;
+                actualizarDiasPorCategoria();
+            } else {
+                document.getElementById('alerta').classList.remove('hidden');
+            }
+        }
+
         function actualizarDiasTrabajados() {
-            const container = document.getElementById('dias-trabajados-container');
+            const container = document.getElementById('dias-trabajados-container').querySelector('.space-y-3');
             container.innerHTML = '';
 
             const categorias = categoriasSuperiores(estado.categoria);
@@ -405,7 +508,7 @@ html {
         }
 
         function actualizarNocturnidad() {
-            const container = document.getElementById('nocturnidad-container');
+            const container = document.getElementById('nocturnidad-container').querySelector('.space-y-3');
             container.innerHTML = '';
 
             const categorias = categoriasOrdenadas(estado.categoria);
@@ -530,40 +633,65 @@ html {
             let totalArrancadores = 0;
             let detalles = [];
 
-            // Salario y complemento de la categoría principal
-            const salarioBasePrincipal = salarios[estado.categoria].base;
-            const complementoPrincipal = salarios[estado.categoria].complemento;
-
-            totalSalarioBase = salarioBasePrincipal;
-            totalComplementoNivel = complementoPrincipal;
-
-            detalles.push(`<strong>Categoría Principal (${estado.categoria}):</strong>`);
-            detalles.push(`- Salario Base: ${salarioBasePrincipal.toFixed(2)}€`);
-            detalles.push(`- Complemento de Nivel Salarial: ${complementoPrincipal.toFixed(2)}€`);
-
-            // Diferencias por días en categorías superiores
-            categoriasSuperiores(estado.categoria).forEach(key => {
-                const dias = estado.diasTrabajados[key];
-                if (dias > 0) {
-                    const diferenciaGrupo = (salarios[key].base - salarioBasePrincipal) / 30 * dias;
-                    const diferenciaNivel = (salarios[key].complemento - complementoPrincipal) / 30 * dias;
-
-                    detalles.push(`<strong>Días en ${key}: ${dias} días</strong>`);
-
-                    if (diferenciaGrupo > 0) {
-                        detalles.push(`- Diferencia de Grupo: ${diferenciaGrupo.toFixed(2)}€`);
-                        totalDiferenciasGrupo += diferenciaGrupo;
+            if (estado.mesIncompleto) {
+                // Cálculo para mes incompleto
+                detalles.push(`<strong>Mes incompleto:</strong>`);
+                
+                Object.entries(estado.diasPorCategoria).forEach(([cat, dias]) => {
+                    if (dias > 0) {
+                        const salarioDiario = salarios[cat].base / 30;
+                        const complementoDiario = salarios[cat].complemento / 30;
+                        const subtotalSalario = salarioDiario * dias;
+                        const subtotalComplemento = complementoDiario * dias;
+                        
+                        detalles.push(`<strong>${cat}: ${dias} días</strong>`);
+                        detalles.push(`- Salario base: ${salarioDiario.toFixed(2)}€ x ${dias} = ${subtotalSalario.toFixed(2)}€`);
+                        detalles.push(`- Complemento: ${complementoDiario.toFixed(2)}€ x ${dias} = ${subtotalComplemento.toFixed(2)}€`);
+                        
+                        totalSalarioBase += subtotalSalario;
+                        totalComplementoNivel += subtotalComplemento;
                     }
+                });
+            } else {
+                // Cálculo normal (mes completo)
+                const salarioBasePrincipal = salarios[estado.categoria].base;
+                const complementoPrincipal = salarios[estado.categoria].complemento;
 
-                    if (diferenciaNivel > 0) {
-                        detalles.push(`- Diferencia de Nivel: ${diferenciaNivel.toFixed(2)}€`);
-                        totalDiferenciasNivel += diferenciaNivel;
+                totalSalarioBase = salarioBasePrincipal;
+                totalComplementoNivel = complementoPrincipal;
+
+                detalles.push(`<strong>Categoría Principal (${estado.categoria}):</strong>`);
+                detalles.push(`- Salario Base: ${salarioBasePrincipal.toFixed(2)}€`);
+                detalles.push(`- Complemento de Nivel Salarial: ${complementoPrincipal.toFixed(2)}€`);
+
+                // Diferencias por días en categorías superiores
+                categoriasSuperiores(estado.categoria).forEach(key => {
+                    const dias = estado.diasTrabajados[key];
+                    if (dias > 0) {
+                        const diferenciaGrupo = (salarios[key].base - salarioBasePrincipal) / 30 * dias;
+                        const diferenciaNivel = (salarios[key].complemento - complementoPrincipal) / 30 * dias;
+
+                        detalles.push(`<strong>Días en ${key}: ${dias} días</strong>`);
+
+                        if (diferenciaGrupo > 0) {
+                            detalles.push(`- Diferencia de Grupo: ${diferenciaGrupo.toFixed(2)}€`);
+                            totalDiferenciasGrupo += diferenciaGrupo;
+                        }
+
+                        if (diferenciaNivel > 0) {
+                            detalles.push(`- Diferencia de Nivel: ${diferenciaNivel.toFixed(2)}€`);
+                            totalDiferenciasNivel += diferenciaNivel;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             // Nocturnidad
-            categoriasOrdenadas(estado.categoria).forEach(cat => {
+            const categoriasNocturnidad = estado.mesIncompleto ? 
+                Object.keys(estado.diasPorCategoria).filter(cat => estado.diasPorCategoria[cat] > 0) :
+                categoriasOrdenadas(estado.categoria);
+
+            categoriasNocturnidad.forEach(cat => {
                 const dias = estado.nocturnidad[cat];
                 if (dias > 0) {
                     const precio = preciosNocturnidad[cat];
@@ -586,10 +714,14 @@ html {
             });
 
             // Horas extras
-            categoriasOrdenadas(estado.categoria).forEach(key => {
+            const categoriasExtras = estado.mesIncompleto ? 
+                Object.keys(estado.diasPorCategoria).filter(cat => estado.diasPorCategoria[cat] > 0) :
+                categoriasOrdenadas(estado.categoria);
+
+            categoriasExtras.forEach(key => {
                 const horas = estado.horasExtras[key];
                 if (horas > 0) {
-                    const precioBase = preciosExtras[estado.categoria].extra;
+                    const precioBase = estado.mesIncompleto ? preciosExtras[key].extra : preciosExtras[estado.categoria].extra;
                     const precioOtra = preciosExtras[key].extra;
                     const diferenciaPrecio = precioOtra - precioBase;
 
@@ -597,19 +729,19 @@ html {
                     const subtotalDiferencia = horas * diferenciaPrecio;
 
                     detalles.push(`<strong>Horas extras en ${key}: ${horas} horas</strong>`);
-                    detalles.push(`- Precio base (${estado.categoria}): ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
-                    if (key !== estado.categoria) {
+                    detalles.push(`- Precio base: ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
+                    if (!estado.mesIncompleto && key !== estado.categoria) {
                         detalles.push(`- Diferencia de nivel (${key}): ${diferenciaPrecio.toFixed(2)}€ x ${horas} = ${subtotalDiferencia.toFixed(2)}€`);
                     }
-                    totalHorasExtras += subtotalBase + subtotalDiferencia;
+                    totalHorasExtras += subtotalBase + (estado.mesIncompleto ? 0 : subtotalDiferencia);
                 }
             });
 
             // Horas nocturnas
-            categoriasOrdenadas(estado.categoria).forEach(key => {
+            categoriasExtras.forEach(key => {
                 const horas = estado.horasNocturnas[key];
                 if (horas > 0) {
-                    const precioBase = preciosExtras[estado.categoria].nocturna;
+                    const precioBase = estado.mesIncompleto ? preciosExtras[key].nocturna : preciosExtras[estado.categoria].nocturna;
                     const precioOtra = preciosExtras[key].nocturna;
                     const diferenciaPrecio = precioOtra - precioBase;
 
@@ -617,11 +749,11 @@ html {
                     const subtotalDiferencia = horas * diferenciaPrecio;
 
                     detalles.push(`<strong>Horas nocturnas en ${key}: ${horas} horas</strong>`);
-                    detalles.push(`- Precio base (${estado.categoria}): ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
-                    if (key !== estado.categoria) {
+                    detalles.push(`- Precio base: ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
+                    if (!estado.mesIncompleto && key !== estado.categoria) {
                         detalles.push(`- Diferencia de nivel (${key}): ${diferenciaPrecio.toFixed(2)}€ x ${horas} = ${subtotalDiferencia.toFixed(2)}€`);
                     }
-                    totalHorasNocturnas += subtotalBase + subtotalDiferencia;
+                    totalHorasNocturnas += subtotalBase + (estado.mesIncompleto ? 0 : subtotalDiferencia);
                 }
             });
 
@@ -747,6 +879,7 @@ html {
                 btn.addEventListener('click', () => cambiarCategoria(btn.dataset.categoria));
             });
 
+            document.getElementById('mes-incompleto-checkbox').addEventListener('change', toggleMesIncompleto);
             document.getElementById('plus-asistencia-checkbox').addEventListener('change', function() {
                 estado.plusAsistencia = this.checked;
             });
@@ -759,6 +892,7 @@ html {
 
             // Inicializar categoría B3
             cambiarCategoria('B3');
+            actualizarDiasPorCategoria();
         });
     </script>
 </body>
