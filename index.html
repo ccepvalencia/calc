@@ -817,7 +817,7 @@
                     detalles.push(`<strong>Horas extras en ${key}: ${horas} horas</strong>`);
                     detalles.push(`- Precio base: ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
                     if (!estado.mesIncompleto && key !== estado.categoria) {
-                        detalles.push(`- Diferencia de nivel (${key}): ${diferenciaPrecio.toFixed(2)}€ x ${horas} = ${subtotalDiferencia.toFixed(2)}€`);
+                        detalles.push(`- Diferencia de salarios (${key}): ${diferenciaPrecio.toFixed(2)}€ x ${horas} = ${subtotalDiferencia.toFixed(2)}€`);
                     }
                     totalHorasExtras += subtotalBase + (estado.mesIncompleto ? 0 : subtotalDiferencia);
                 }
