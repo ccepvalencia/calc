@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Nómina Colebega CSIF</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --rojo: #ef4444;
+            --rojo-oscuro: #dc2626;
+            --verde: #10b981;
+            --verde-oscuro: #059669;
+            --gris-oscuro: #1f2937;
+            --gris-claro: #f3f4f6;
+        }
+        
+        html {
+            touch-action: manipulation;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #111827;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-rojo {
+            background-color: var(--rojo);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-rojo:hover {
+            background-color: var(--rojo-oscuro);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-verde {
+            background-color: var(--verde);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-verde:hover {
+            background-color: var(--verde-oscuro);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+        
+        .categoria-activa {
+            background-color: var(--rojo);
+            color: white;
+        }
+        
+        .stepper-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .stepper-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .stepper-input {
+            width: 50px;
+            text-align: center;
+            font-weight: 600;
+            -moz-appearance: textfield;
+            border: none;
+            background-color: #f3f4f6;
+            border-radius: 8px;
+        }
+        
+        .stepper-input::-webkit-outer-spin-button,
+        .stepper-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .texto-verde {
+            color: var(--verde);
+        }
+        
+        .texto-rojo {
+            color: var(--rojo);
+        }
+        
+        .bg-rojo-suave {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        
+        .bg-verde-suave {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Existing animations and other styles */
+        .card-entrance {
+            animation: cardEntrance 0.6s ease-out;
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating-button {
+            box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(239, 68, 68, 0.5);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .switch-container {
+            --switch-width: 44px;
+            --switch-height: 24px;
+            --thumb-size: 18px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .switch-track {
+            width: var(--switch-width);
+            height: var(--switch-height);
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .switch-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: var(--thumb-size);
+            height: var(--thumb-size);
+            background-color: white;
+            border-radius: 9999px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:checked ~ .switch-track {
+            background-color: #ef4444;
+        }
+
+        input:checked ~ .switch-thumb {
+            transform: translateX(calc(var(--switch-width) - var(--thumb-size) - 6px));
+        }
+
+        .mes-incompleto-container {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-md mx-auto px-4 py-3">
+            <h1 class="text-xl font-bold text-gray-800 text-center">
+                <span class="bg-gradient-to-r from-red-600 to-red-400 bg-clip-text text-transparent">
+                    Calculadora de Nómina Colebega -CSIF-
+                </span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 py-6 space-y-6">
+        <!-- Categoría -->
+        <div data-categoria-container class="card-entrance bg-white rounded-xl p-4 shadow-lg transition-all hover:shadow-xl">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Categoría base</h3>
+            <div class="grid grid-cols-4 gap-2">
+                <button data-categoria="B3" class="py-2 text-sm font-medium rounded-lg bg-red-50 text-red-700 border border-red-200">B3</button>
+                <button data-categoria="B4" class="py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">B4</button>
+                <button data-categoria="C5" class="py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">C5</button>
+                <button data-categoria="C6" class="py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">C6</button>
+            </div>
+        </div>
+
+        <!-- Mes Incompleto -->
+        <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700">Calcular mes incompleto</h3>
+                    <p class="text-xs text-gray-500">Activar para introducir días sueltos por categoría</p>
+                </div>
+                <label class="switch-container cursor-pointer">
+                    <input type="checkbox" id="mes-incompleto-checkbox" class="sr-only peer">
+                    <div class="switch-track"></div>
+                    <div class="switch-thumb"></div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Días por categoría (mes incompleto) -->
+        <div id="dias-por-categoria-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg mt-4 hidden mes-incompleto-container">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Días trabajados por categoría</h3>
+            <div class="space-y-3" id="dias-por-categoria-list"></div>
+            <div class="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-700">
+                Total días: <span id="total-dias-mes-incompleto" class="font-medium">0</span>/30
+            </div>
+        </div>
+
+        <!-- Días Trabajados -->
+        <div id="dias-trabajados-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Días Trabajados como categoría superior</h3>
+            <div class="space-y-3"></div>
+        </div>
+
+        <!-- Nocturnidad -->
+        <div id="nocturnidad-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Nocturnidad (días de noche)</h3>
+            <div class="space-y-3"></div>
+        </div>
+
+        <!-- Arrancadores -->
+        <div id="arrancadores-section" class="card-entrance bg-white rounded-xl p-4 shadow-lg hidden">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Arrancadores</h3>
+            <div class="space-y-4">
+                <div id="arrancador-c5-container" class="flex items-center justify-between">
+                    <span class="text-sm text-gray-700">Arrancador C5</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="cambiarArrancador('C5', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                        <span id="arrancador-C5" class="w-8 text-center font-medium">0</span>
+                        <button onclick="cambiarArrancador('C5', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
+                    </div>
+                    <span class="text-xs text-gray-500">22,26€/dia</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-700">Arrancador C6</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="cambiarArrancador('C6', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                        <span id="arrancador-C6" class="w-8 text-center font-medium">0</span>
+                        <button onclick="cambiarArrancador('C6', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
+                    </div>
+                    <span class="text-xs text-gray-500">23,25€/dia</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horas Extras -->
+        <div id="horas-extras-container" class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Horas Extras</h3>
+            <div class="space-y-4" id="horas-extras-content"></div>
+        </div>
+
+        <!-- 4º Turno -->
+        <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">4º Turno</h3>
+            <div class="space-y-5">
+                <!-- Sábado -->
+                <div class="space-y-2">
+                    <h4 class="text-sm font-medium text-center text-gray-700">Sábado</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-500 mb-2">8 Horas</p>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasSabado8', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasSabado8" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasSabado8', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-500 mb-2">12 Horas</p>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasSabado12', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasSabado12" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasSabado12', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domingo -->
+                <div class="space-y-2">
+                    <h4 class="text-sm font-medium text-center text-gray-700">Domingo</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-500 mb-2">8 Horas</p>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasDomingo8', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasDomingo8" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasDomingo8', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-500 mb-2">12 Horas</p>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHoras('horasDomingo12', -1)" class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <input type="number" id="horasDomingo12" class="stepper-input" value="0" readonly>
+                                <button onclick="cambiarHoras('horasDomingo12', 1)" class="stepper-btn bg-verde-suave texto-verde">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuraciones -->
+        <div class="space-y-4">
+            <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-700">Plus de asistencia</h3>
+                        <p class="text-xs text-gray-500">44,79€</p>
+                    </div>
+                    <label class="switch-container cursor-pointer">
+                        <input type="checkbox" id="plus-asistencia-checkbox" class="sr-only peer">
+                        <div class="switch-track"></div>
+                        <div class="switch-thumb"></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="card-entrance bg-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-700">Adscripción fin de semana</h3>
+                        <p class="text-xs text-gray-500">110,63€</p>
+                    </div>
+                    <label class="switch-container cursor-pointer">
+                        <input type="checkbox" id="adscripcion-checkbox" class="sr-only peer">
+                        <div class="switch-track"></div>
+                        <div class="switch-thumb"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón Calcular -->
+        <button id="calcular-btn" class="floating-button w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-4 px-6 rounded-xl transition-all">
+            Calcular Nómina
+        </button>
+
+        <!-- Resultados -->
+        <div id="resultado-container" class="hidden">
+            <div class="card-entrance bg-white rounded-xl p-4 shadow-lg animate-scale-in">
+                <div id="resultado" class="text-sm space-y-2 custom-scrollbar max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Alerta -->
+    <div id="alerta" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 max-w-sm w-full space-y-4 animate-scale-in">
+            <h3 class="text-lg font-semibold text-gray-800">Límite alcanzado</h3>
+            <p class="text-gray-600 text-sm">No se pueden superar los 30 días trabajados en categorías superiores.</p>
+            <button onclick="document.getElementById('alerta').classList.add('hidden')"
+                    class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-colors">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let estado = {
+            categoria: "B3",
+            mesIncompleto: false,
+            diasPorCategoria: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
+            diasTrabajados: { "B4": 0, "C5": 0, "C6": 0 },
+            nocturnidad: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
+            arrancadores: { "C5": 0, "C6": 0 },
+            horasExtras: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
+            horasNocturnas: { "B3": 0, "B4": 0, "C5": 0, "C6": 0 },
+            horasSabado8: 0,
+            horasSabado12: 0,
+            horasDomingo8: 0,
+            horasDomingo12: 0,
+            adscripcionFinDeSemana: false,
+            plusAsistencia: false
+        };
+
+        const salarios = {
+            "B3": { base: 1932.67, complemento: 302.05 },
+            "B4": { base: 1932.67, complemento: 588.39 },
+            "C5": { base: 2125.85, complemento: 693.03 },
+            "C6": { base: 2125.85, complemento: 1128.10 }
+        };
+
+        const preciosExtras = {
+            "B3": { extra: 25.51, nocturna: 35.73 },
+            "B4": { extra: 26.86, nocturna: 37.60 },
+            "C5": { extra: 28.10, nocturna: 39.33 },
+            "C6": { extra: 28.10, nocturna: 39.33 }
+        };
+
+        const preciosNocturnidad = {
+            "B3": 29.79,
+            "B4": 33.62,
+            "C5": 37.59,
+            "C6": 43.39
+        };
+
+        const preciosArrancadores = {
+            "C5": 22.26,
+            "C6": 23.25
+        };
+
+        const precioSabado8 = 153.36;
+        const precioSabado12 = 232.37;
+        const precioDomingo8 = 175.23;
+        const precioDomingo12 = 265.50;
+        const precioAdscripcion = 110.63;
+        const precioPlusAsistencia = 44.79;
+
+        function categoriasOrdenadas(categoria) {
+            switch (categoria) {
+                case "B3": return ["B3", "B4", "C5", "C6"];
+                case "B4": return ["B4", "C5", "C6"];
+                case "C5": return ["C5", "C6"];
+                case "C6": return ["C6"];
+                default: return [];
+            }
+        }
+
+        function categoriasSuperiores(categoria) {
+            switch (categoria) {
+                case "B3": return ["B4", "C5", "C6"];
+                case "B4": return ["C5", "C6"];
+                case "C5": return ["C6"];
+                default: return [];
+            }
+        }
+
+        function totalDiasTrabajados() {
+            return Object.values(estado.diasTrabajados).reduce((a, b) => a + b, 0);
+        }
+
+        function verificarMostrarArrancadores() {
+            const esC5C6 = estado.categoria === "C5" || estado.categoria === "C6";
+            const tieneDiasC5C6 = estado.diasTrabajados["C5"] > 0 || estado.diasTrabajados["C6"] > 0;
+            
+            const seccion = document.getElementById('arrancadores-section');
+            const arrancadorC5 = document.getElementById('arrancador-c5-container');
+            
+            if (esC5C6 || tieneDiasC5C6) {
+                seccion.classList.remove('hidden');
+                // Ocultar C5 solo si la categoría es C6
+                if (estado.categoria === "C6") {
+                    arrancadorC5.classList.add('hidden');
+                } else {
+                    arrancadorC5.classList.remove('hidden');
+                }
+            } else {
+                seccion.classList.add('hidden');
+            }
+        }
+
+        function toggleMesIncompleto() {
+            estado.mesIncompleto = !estado.mesIncompleto;
+            actualizarVistaMesIncompleto();
+        }
+
+        function actualizarVistaMesIncompleto() {
+            const checkbox = document.getElementById('mes-incompleto-checkbox');
+            checkbox.checked = estado.mesIncompleto;
+            
+            const categoriasContainer = document.querySelector('[data-categoria-container]');
+            const diasPorCategoriaContainer = document.getElementById('dias-por-categoria-container');
+            const diasTrabajadosContainer = document.getElementById('dias-trabajados-container');
+            
+            if (estado.mesIncompleto) {
+                categoriasContainer.classList.add('hidden');
+                diasPorCategoriaContainer.classList.remove('hidden');
+                diasTrabajadosContainer.classList.add('hidden');
+                // Reiniciar días trabajados en categorías superiores
+                Object.keys(estado.diasTrabajados).forEach(key => {
+                    estado.diasTrabajados[key] = 0;
+                });
+                actualizarDiasTrabajados();
+                actualizarDiasPorCategoria();
+            } else {
+                categoriasContainer.classList.remove('hidden');
+                diasPorCategoriaContainer.classList.add('hidden');
+                diasTrabajadosContainer.classList.remove('hidden');
+                // Reiniciar días por categoría
+                Object.keys(estado.diasPorCategoria).forEach(key => {
+                    estado.diasPorCategoria[key] = 0;
+                });
+                actualizarDiasPorCategoria();
+            }
+        }
+
+        function actualizarDiasPorCategoria() {
+            const container = document.getElementById('dias-por-categoria-list');
+            container.innerHTML = '';
+            
+            Object.entries(estado.diasPorCategoria).forEach(([cat, dias]) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between py-2';
+                div.innerHTML = `
+                    <span class="text-sm text-gray-700">${cat}</span>
+                    <div class="flex items-center gap-2">
+                        <button class="stepper-btn bg-rojo-suave texto-rojo"
+                            onclick="cambiarDiasPorCategoria('${cat}', -1)">-</button>
+                        <span class="w-8 text-center font-medium">${dias}</span>
+                        <button class="stepper-btn bg-verde-suave texto-verde"
+                            onclick="cambiarDiasPorCategoria('${cat}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            
+            // Actualizar total de días
+            const total = Object.values(estado.diasPorCategoria).reduce((a, b) => a + b, 0);
+            document.getElementById('total-dias-mes-incompleto').textContent = total;
+        }
+
+        function cambiarDiasPorCategoria(categoria, valor) {
+            const nuevoValor = Math.max(0, estado.diasPorCategoria[categoria] + valor);
+            const nuevoTotal = Object.values(estado.diasPorCategoria).reduce((a, b) => a + b, 0) 
+                                - estado.diasPorCategoria[categoria] + nuevoValor;
+            
+            if (nuevoTotal <= 30) {
+                estado.diasPorCategoria[categoria] = nuevoValor;
+                actualizarDiasPorCategoria();
+            } else {
+                document.getElementById('alerta').classList.remove('hidden');
+            }
+        }
+
+        function actualizarDiasTrabajados() {
+            const container = document.getElementById('dias-trabajados-container').querySelector('.space-y-3');
+            container.innerHTML = '';
+
+            const categorias = categoriasSuperiores(estado.categoria);
+
+            if (categorias.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-2 text-sm">No hay categorías superiores disponibles</div>';
+                return;
+            }
+
+            categorias.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between py-2';
+                div.innerHTML = `
+                    <span class="text-sm text-gray-700">${cat}</span>
+                    <div class="flex items-center gap-2">
+                        <button class="stepper-btn bg-rojo-suave texto-rojo"
+                            onclick="cambiarDias('${cat}', -1)">-</button>
+                        <span class="w-8 text-center font-medium">${estado.diasTrabajados[cat]}</span>
+                        <button class="stepper-btn bg-verde-suave texto-verde"
+                            onclick="cambiarDias('${cat}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function actualizarNocturnidad() {
+            const container = document.getElementById('nocturnidad-container').querySelector('.space-y-3');
+            container.innerHTML = '';
+
+            const categorias = categoriasOrdenadas(estado.categoria);
+
+            categorias.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between py-2';
+                div.innerHTML = `
+                    <span class="text-sm text-gray-700">${cat}</span>
+                    <div class="flex items-center gap-2">
+                        <button class="stepper-btn bg-rojo-suave texto-rojo"
+                            onclick="cambiarNocturnidad('${cat}', -1)">-</button>
+                        <span class="w-8 text-center font-medium">${estado.nocturnidad[cat]}</span>
+                        <button class="stepper-btn bg-verde-suave texto-verde"
+                            onclick="cambiarNocturnidad('${cat}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function actualizarHorasExtras() {
+            const container = document.getElementById('horas-extras-content');
+            container.innerHTML = '';
+
+            const categorias = categoriasOrdenadas(estado.categoria);
+
+            categorias.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'space-y-3';
+                div.innerHTML = `
+                    <div class="text-sm font-medium text-gray-700 text-center">${cat}</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-50 p-3 rounded-xl">
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHorasExtras('${cat}', 'extras', -1)"
+                                    class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <span class="w-12 text-center font-medium">${estado.horasExtras[cat]}</span>
+                                <button onclick="cambiarHorasExtras('${cat}', 'extras', 1)"
+                                    class="stepper-btn bg-verde-suave texto-verde">+</button>
+                            </div>
+                            <p class="text-xs text-gray-500 text-center mt-2">Diurnas</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-xl">
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', -1)"
+                                    class="stepper-btn bg-rojo-suave texto-rojo">-</button>
+                                <span class="w-12 text-center font-medium">${estado.horasNocturnas[cat]}</span>
+                                <button onclick="cambiarHorasExtras('${cat}', 'nocturnas', 1)"
+                                    class="stepper-btn bg-verde-suave texto-verde">+</button>
+                            </div>
+                            <p class="text-xs text-gray-500 text-center mt-2">Nocturnas</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function cambiarDias(categoria, valor) {
+            const nuevoValor = Math.max(0, estado.diasTrabajados[categoria] + valor);
+            const nuevoTotal = totalDiasTrabajados() - estado.diasTrabajados[categoria] + nuevoValor;
+
+            if (nuevoTotal <= 30) {
+                estado.diasTrabajados[categoria] = nuevoValor;
+                actualizarDiasTrabajados();
+                verificarMostrarArrancadores();
+            } else {
+                document.getElementById('alerta').classList.remove('hidden');
+            }
+        }
+
+        function cambiarNocturnidad(categoria, valor) {
+            estado.nocturnidad[categoria] = Math.max(0, estado.nocturnidad[categoria] + valor);
+            actualizarNocturnidad();
+        }
+
+        function cambiarArrancador(tipo, valor) {
+            estado.arrancadores[tipo] = Math.max(0, estado.arrancadores[tipo] + valor);
+            document.getElementById(`arrancador-${tipo}`).textContent = estado.arrancadores[tipo];
+        }
+
+        function cambiarHorasExtras(categoria, tipo, valor) {
+            if (tipo === 'extras') {
+                estado.horasExtras[categoria] = Math.max(0, estado.horasExtras[categoria] + valor);
+            } else if (tipo === 'nocturnas') {
+                estado.horasNocturnas[categoria] = Math.max(0, estado.horasNocturnas[categoria] + valor);
+            }
+            actualizarHorasExtras();
+        }
+
+        function cambiarHoras(tipo, valor) {
+            estado[tipo] = Math.max(0, estado[tipo] + valor);
+            document.getElementById(tipo).value = estado[tipo];
+        }
+
+        function cambiarCategoria(categoria) {
+            estado.categoria = categoria;
+            document.querySelectorAll('[data-categoria]').forEach(b => {
+                b.classList.remove('bg-red-50', 'text-red-700', 'border-red-200');
+                b.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+            });
+            document.querySelector(`[data-categoria="${categoria}"]`).classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+            document.querySelector(`[data-categoria="${categoria}"]`).classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+            actualizarDiasTrabajados();
+            actualizarNocturnidad();
+            actualizarHorasExtras();
+            verificarMostrarArrancadores();
+        }
+
+        function calcularNomina() {
+            let totalSalarioBase = 0;
+            let totalComplementoNivel = 0;
+            let totalDiferenciasGrupo = 0;
+            let totalDiferenciasNivel = 0;
+            let totalHorasExtras = 0;
+            let totalHorasNocturnas = 0;
+            let total4Turno = 0;
+            let totalAdscripcion = 0;
+            let totalPlusAsistencia = 0;
+            let totalNocturnidad = 0;
+            let totalArrancadores = 0;
+            let detalles = [];
+
+            if (estado.mesIncompleto) {
+                // Cálculo para mes incompleto
+                detalles.push(`<strong>Mes incompleto:</strong>`);
+                
+                Object.entries(estado.diasPorCategoria).forEach(([cat, dias]) => {
+                    if (dias > 0) {
+                        const salarioDiario = salarios[cat].base / 30;
+                        const complementoDiario = salarios[cat].complemento / 30;
+                        const subtotalSalario = salarioDiario * dias;
+                        const subtotalComplemento = complementoDiario * dias;
+                        
+                        detalles.push(`<strong>${cat}: ${dias} días</strong>`);
+                        detalles.push(`- Salario base: ${salarioDiario.toFixed(2)}€ x ${dias} = ${subtotalSalario.toFixed(2)}€`);
+                        detalles.push(`- Complemento: ${complementoDiario.toFixed(2)}€ x ${dias} = ${subtotalComplemento.toFixed(2)}€`);
+                        
+                        totalSalarioBase += subtotalSalario;
+                        totalComplementoNivel += subtotalComplemento;
+                    }
+                });
+            } else {
+                // Cálculo normal (mes completo)
+                const salarioBasePrincipal = salarios[estado.categoria].base;
+                const complementoPrincipal = salarios[estado.categoria].complemento;
+
+                totalSalarioBase = salarioBasePrincipal;
+                totalComplementoNivel = complementoPrincipal;
+
+                detalles.push(`<strong>Categoría Principal (${estado.categoria}):</strong>`);
+                detalles.push(`- Salario Base: ${salarioBasePrincipal.toFixed(2)}€`);
+                detalles.push(`- Complemento de Nivel Salarial: ${complementoPrincipal.toFixed(2)}€`);
+
+                // Diferencias por días en categorías superiores
+                categoriasSuperiores(estado.categoria).forEach(key => {
+                    const dias = estado.diasTrabajados[key];
+                    if (dias > 0) {
+                        const diferenciaGrupo = (salarios[key].base - salarioBasePrincipal) / 30 * dias;
+                        const diferenciaNivel = (salarios[key].complemento - complementoPrincipal) / 30 * dias;
+
+                        detalles.push(`<strong>Días en ${key}: ${dias} días</strong>`);
+
+                        if (diferenciaGrupo > 0) {
+                            detalles.push(`- Diferencia de Grupo: ${diferenciaGrupo.toFixed(2)}€`);
+                            totalDiferenciasGrupo += diferenciaGrupo;
+                        }
+
+                        if (diferenciaNivel > 0) {
+                            detalles.push(`- Diferencia de Nivel: ${diferenciaNivel.toFixed(2)}€`);
+                            totalDiferenciasNivel += diferenciaNivel;
+                        }
+                    }
+                });
+            }
+
+            // Nocturnidad
+            const categoriasNocturnidad = estado.mesIncompleto ? 
+                Object.keys(estado.diasPorCategoria).filter(cat => estado.diasPorCategoria[cat] > 0) :
+                categoriasOrdenadas(estado.categoria);
+
+            categoriasNocturnidad.forEach(cat => {
+                const dias = estado.nocturnidad[cat];
+                if (dias > 0) {
+                    const precio = preciosNocturnidad[cat];
+                    const subtotal = dias * precio;
+                    
+                    detalles.push(`<strong>Nocturnidad ${cat}:</strong> ${dias} días x ${precio.toFixed(2)}€ = ${subtotal.toFixed(2)}€`);
+                    totalNocturnidad += subtotal;
+                }
+            });
+
+            // Arrancadores
+            Object.entries(estado.arrancadores).forEach(([tipo, cantidad]) => {
+                if (cantidad > 0) {
+                    const precio = preciosArrancadores[tipo];
+                    const subtotal = cantidad * precio;
+                    
+                    detalles.push(`<strong>Arrancador ${tipo}:</strong> ${cantidad} x ${precio.toFixed(2)}€ = ${subtotal.toFixed(2)}€`);
+                    totalArrancadores += subtotal;
+                }
+            });
+
+            // Horas extras
+            const categoriasExtras = estado.mesIncompleto ? 
+                Object.keys(estado.diasPorCategoria).filter(cat => estado.diasPorCategoria[cat] > 0) :
+                categoriasOrdenadas(estado.categoria);
+
+            categoriasExtras.forEach(key => {
+                const horas = estado.horasExtras[key];
+                if (horas > 0) {
+                    const precioBase = estado.mesIncompleto ? preciosExtras[key].extra : preciosExtras[estado.categoria].extra;
+                    const precioOtra = preciosExtras[key].extra;
+                    const diferenciaPrecio = precioOtra - precioBase;
+
+                    const subtotalBase = horas * precioBase;
+                    const subtotalDiferencia = horas * diferenciaPrecio;
+
+                    detalles.push(`<strong>Horas extras en ${key}: ${horas} horas</strong>`);
+                    detalles.push(`- Precio base: ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
+                    if (!estado.mesIncompleto && key !== estado.categoria) {
+                        detalles.push(`- Diferencia de salarios (${key}): ${diferenciaPrecio.toFixed(2)}€ x ${horas} = ${subtotalDiferencia.toFixed(2)}€`);
+                    }
+                    totalHorasExtras += subtotalBase + (estado.mesIncompleto ? 0 : subtotalDiferencia);
+                }
+            });
+
+            // Horas nocturnas
+            categoriasExtras.forEach(key => {
+                const horas = estado.horasNocturnas[key];
+                if (horas > 0) {
+                    const precioBase = estado.mesIncompleto ? preciosExtras[key].nocturna : preciosExtras[estado.categoria].nocturna;
+                    const precioOtra = preciosExtras[key].nocturna;
+                    const diferenciaPrecio = precioOtra - precioBase;
+
+                    const subtotalBase = horas * precioBase;
+                    const subtotalDiferencia = horas * diferenciaPrecio;
+
+                    detalles.push(`<strong>Horas nocturnas en ${key}: ${horas} horas</strong>`);
+                    detalles.push(`- Precio base: ${precioBase.toFixed(2)}€ x ${horas} = ${subtotalBase.toFixed(2)}€`);
+                    if (!estado.mesIncompleto && key !== estado.categoria) {
+                        detalles.push(`- Diferencia de nivel (${key}): ${diferenciaPrecio.toFixed(2)}€ x ${horas} = ${subtotalDiferencia.toFixed(2)}€`);
+                    }
+                    totalHorasNocturnas += subtotalBase + (estado.mesIncompleto ? 0 : subtotalDiferencia);
+                }
+            });
+
+            // 4º Turno - Sábado
+            const horasSabado = {
+                '8': estado.horasSabado8,
+                '12': estado.horasSabado12
+            };
+
+            let totalSabado = 0;
+            if (horasSabado['8'] > 0 || horasSabado['12'] > 0) {
+                detalles.push(`<strong>Sábado (4º Turno):</strong>`);
+
+                Object.entries(horasSabado).forEach(([horas, cantidad]) => {
+                    if (cantidad > 0) {
+                        const precio = horas === '8' ? precioSabado8 : precioSabado12;
+                        const total = cantidad * precio;
+                        detalles.push(`- ${horas} horas: ${cantidad} x ${precio.toFixed(2)}€ = ${total.toFixed(2)}€`);
+                        totalSabado += total;
+                    }
+                });
+
+                total4Turno += totalSabado;
+            }
+
+            // 4º Turno - Domingo
+            const horasDomingo = {
+                '8': estado.horasDomingo8,
+                '12': estado.horasDomingo12
+            };
+
+            let totalDomingo = 0;
+            if (horasDomingo['8'] > 0 || horasDomingo['12'] > 0) {
+                detalles.push(`<strong>Domingo (4º Turno):</strong>`);
+
+                Object.entries(horasDomingo).forEach(([horas, cantidad]) => {
+                    if (cantidad > 0) {
+                        const precio = horas === '8' ? precioDomingo8 : precioDomingo12;
+                        const total = cantidad * precio;
+                        detalles.push(`- ${horas} horas: ${cantidad} x ${precio.toFixed(2)}€ = ${total.toFixed(2)}€`);
+                        totalDomingo += total;
+                    }
+                });
+
+                total4Turno += totalDomingo;
+            }
+
+            // Plus de asistencia
+            if (estado.plusAsistencia) {
+                detalles.push(`<strong>Plus de asistencia:</strong> ${precioPlusAsistencia.toFixed(2)}€`);
+                totalPlusAsistencia = precioPlusAsistencia;
+            }
+
+            // Adscripción al fin de semana
+            if (estado.adscripcionFinDeSemana) {
+                detalles.push(`<strong>Adscripción al fin de semana:</strong> ${precioAdscripcion.toFixed(2)}€`);
+                totalAdscripcion = precioAdscripcion;
+            }
+
+            // Total general
+            const total = totalSalarioBase +
+                          totalComplementoNivel +
+                          totalDiferenciasGrupo +
+                          totalDiferenciasNivel +
+                          totalHorasExtras +
+                          totalHorasNocturnas +
+                          total4Turno +
+                          totalAdscripcion +
+                          totalPlusAsistencia +
+                          totalNocturnidad +
+                          totalArrancadores;
+
+            detalles.push(`<br><strong>Resumen Final:</strong>`);
+            detalles.push(`- Total Salario Base: ${totalSalarioBase.toFixed(2)}€`);
+            detalles.push(`- Complemento de Nivel Salarial: ${totalComplementoNivel.toFixed(2)}€`);
+
+            if (totalDiferenciasGrupo > 0) {
+                detalles.push(`- Total Diferencias de Grupo: ${totalDiferenciasGrupo.toFixed(2)}€`);
+            }
+
+            if (totalDiferenciasNivel > 0) {
+                detalles.push(`- Total Diferencias de Nivel: ${totalDiferenciasNivel.toFixed(2)}€`);
+            }
+
+            if (totalNocturnidad > 0) {
+                detalles.push(`- Total Nocturnidad: ${totalNocturnidad.toFixed(2)}€`);
+            }
+
+            if (totalArrancadores > 0) {
+                detalles.push(`- Total Arrancadores: ${totalArrancadores.toFixed(2)}€`);
+            }
+
+            if (totalHorasExtras > 0) {
+                detalles.push(`- Total Horas Extras: ${totalHorasExtras.toFixed(2)}€`);
+            }
+
+            if (totalHorasNocturnas > 0) {
+                detalles.push(`- Total Horas Nocturnas: ${totalHorasNocturnas.toFixed(2)}€`);
+            }
+
+            if (total4Turno > 0) {
+                detalles.push(`- Total 4º Turno: ${total4Turno.toFixed(2)}€`);
+            }
+
+            if (totalPlusAsistencia > 0) {
+                detalles.push(`- Plus de asistencia: ${totalPlusAsistencia.toFixed(2)}€`);
+            }
+
+            if (totalAdscripcion > 0) {
+                detalles.push(`- Adscripción al fin de semana: ${totalAdscripcion.toFixed(2)}€`);
+            }
+
+            detalles.push(`<div class="text-red-600 font-bold mt-2">Total General (bruto): ${total.toFixed(2)}€</div>`);
+
+            document.getElementById('resultado').innerHTML = detalles.join('<br>');
+            document.getElementById('resultado-container').classList.remove('hidden');
+            document.getElementById('resultado-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-categoria]').forEach(btn => {
+                btn.addEventListener('click', () => cambiarCategoria(btn.dataset.categoria));
+            });
+
+            document.getElementById('mes-incompleto-checkbox').addEventListener('change', toggleMesIncompleto);
+            document.getElementById('plus-asistencia-checkbox').addEventListener('change', function() {
+                estado.plusAsistencia = this.checked;
+            });
+
+            document.getElementById('adscripcion-checkbox').addEventListener('change', function() {
+                estado.adscripcionFinDeSemana = this.checked;
+            });
+
+            document.getElementById('calcular-btn').addEventListener('click', calcularNomina);
+
+            // Inicializar categoría B3
+            cambiarCategoria('B3');
+            actualizarDiasPorCategoria();
+            actualizarHorasExtras(); // Asegurarse de que las horas extras se muestran al cargar
+        });
+    </script>
+</body>
+</html>
