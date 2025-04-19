@@ -30,40 +30,51 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); /* Degradado suave de fondo */
             color: #111827; /* Color de texto principal */
-            padding-bottom: 2rem;
-            line-height: 1.6; /* Mejorar legibilidad del texto */
+            padding-bottom: 1.5rem; /* Reducir padding inferior */
+            line-height: 1.5; /* Ajustar interlineado */
         }
 
         /* Estilo base para las tarjetas de contenido */
         .card {
             background: white;
-            border-radius: 16px; /* Bordes más redondeados */
-            box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.08); /* Sombra más suave */
+            border-radius: 10px; /* Bordes ligeramente menos redondeados */
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.04); /* Sombra más sutil */
             transition: all 0.3s ease;
             border: 1px solid #e5e7eb; /* Borde sutil */
+            padding: 1rem; /* Reducir padding */
         }
 
         /* Efecto hover para las tarjetas */
         .card:hover {
-            box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada en hover */
-            transform: translateY(-3px); /* Ligero desplazamiento hacia arriba */
+            box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.07); /* Sombra más pronunciada en hover */
+            transform: translateY(-1px); /* Ligero desplazamiento hacia arriba */
         }
+
+        /* Espaciado entre tarjetas */
+        main > div.card {
+            margin-bottom: 1rem; /* Reducir espacio entre secciones */
+        }
+         main > div.card:last-of-type {
+            margin-bottom: 0; /* Eliminar margen inferior de la última tarjeta */
+        }
+
 
         /* Estilo base para botones rojos */
         .btn-rojo {
             background-color: var(--rojo);
             color: white;
             transition: all 0.3s ease;
-            border-radius: 8px; /* Bordes redondeados */
-            padding: 0.75rem 1.5rem; /* Padding */
+            border-radius: 6px; /* Bordes redondeados */
+            padding: 0.6rem 1.2rem; /* Reducir padding */
             font-weight: 600; /* Peso de fuente semibold */
+             font-size: 0.9rem; /* Ajustar tamaño de fuente */
         }
 
         /* Efecto hover para botones rojos */
         .btn-rojo:hover {
             background-color: var(--rojo-oscuro);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px -3px rgba(239, 68, 68, 0.4); /* Sombra con color */
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -3px rgba(239, 68, 68, 0.3); /* Sombra con color */
         }
 
         /* Estilo base para botones verdes */
@@ -71,16 +82,17 @@
             background-color: var(--verde);
             color: white;
             transition: all 0.3s ease;
-            border-radius: 8px; /* Bordes redondeados */
-            padding: 0.75rem 1.5rem; /* Padding */
+            border-radius: 6px; /* Bordes redondeados */
+            padding: 0.6rem 1.2rem; /* Reducir padding */
             font-weight: 600; /* Peso de fuente semibold */
+             font-size: 0.9rem; /* Ajustar tamaño de fuente */
         }
 
         /* Efecto hover para botones verdes */
         .btn-verde:hover {
             background-color: var(--verde-oscuro);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px -3px rgba(16, 185, 129, 0.4); /* Sombra con color */
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -3px rgba(16, 185, 129, 0.3); /* Sombra con color */
         }
 
         /* Estilo para la categoría activa */
@@ -93,50 +105,51 @@
 
         /* Estilo para los botones del stepper (+/-) */
         .stepper-btn {
-            width: 36px; /* Ancho ligeramente mayor */
-            height: 36px; /* Altura igual al ancho */
+            width: 28px; /* Ancho reducido */
+            height: 28px; /* Altura reducida */
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px; /* Bordes más redondeados */
+            border-radius: 6px; /* Bordes más redondeados */
             font-weight: 700; /* Peso de fuente bold */
             transition: all 0.2s ease;
             border: none;
             cursor: pointer;
             user-select: none; /* Evitar selección de texto */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra pequeña */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07); /* Sombra más pequeña */
         }
 
         /* Efecto hover para los botones del stepper */
         .stepper-btn:hover {
-            transform: scale(1.05); /* Ligero aumento de tamaño */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+            transform: scale(1.08); /* Ligero aumento de tamaño */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
         }
 
          /* Estilo específico para el botón de decremento */
         .stepper-btn.bg-pink-50 {
-             background-color: #fdf2f8; /* Rosa muy claro */
-             color: #db2777; /* Rosa oscuro */
+             background-color: #fef2f4; /* Rosa muy claro */
+             color: #e11d48; /* Rosa oscuro */
         }
 
         /* Estilo específico para el botón de incremento */
         .stepper-btn.bg-green-50 {
-            background-color: #ecfdf5; /* Verde muy claro */
-            color: #047857; /* Verde oscuro */
+            background-color: #f0fdf4; /* Verde muy claro */
+            color: #10b981; /* Verde oscuro */
         }
 
 
         /* Estilo para el input del stepper */
         .stepper-input {
-            width: 60px; /* Ancho mayor */
+            width: 40px; /* Ancho menor */
             text-align: center;
             font-weight: 600;
             -moz-appearance: textfield;
             border: none;
             background-color: #f9fafb; /* Fondo muy claro */
-            border-radius: 8px; /* Bordes redondeados */
-            padding: 0.5rem 0.25rem; /* Padding */
+            border-radius: 4px; /* Bordes redondeados */
+            padding: 0.3rem 0.15rem; /* Padding reducido */
             color: #1f2937; /* Color de texto */
+             font-size: 0.875rem; /* text-sm */
         }
 
         /* Ocultar flechas en inputs numéricos */
@@ -162,43 +175,43 @@
 
         /* Animación de entrada para las tarjetas */
         .card-entrance {
-            animation: cardEntrance 0.6s ease-out forwards; /* forwards mantiene el estado final */
+            animation: cardEntrance 0.5s ease-out forwards; /* Reducir duración */
             opacity: 0; /* Inicialmente invisible */
         }
 
         /* Keyframes para la animación de entrada */
         @keyframes cardEntrance {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); } /* Reducir desplazamiento */
             to { opacity: 1; transform: translateY(0); }
         }
 
         /* Estilo para el botón flotante (Calcular) */
         .floating-button {
-            box-shadow: 0 10px 20px -5px rgba(225, 29, 72, 0.4); /* Sombra con color */
+            box-shadow: 0 6px 12px -3px rgba(225, 29, 72, 0.25); /* Sombra con color ligeramente más pequeña */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none; /* Sin borde */
         }
 
         /* Efecto hover para el botón flotante */
         .floating-button:hover {
-            transform: translateY(-3px); /* Ligero desplazamiento hacia arriba */
-            box-shadow: 0 15px 25px -5px rgba(225, 29, 72, 0.5); /* Sombra más intensa */
+            transform: translateY(-1px); /* Ligero desplazamiento hacia arriba */
+            box-shadow: 0 8px 16px -4px rgba(225, 29, 72, 0.35); /* Sombra más intensa */
             background-color: var(--rojo-oscuro); /* Color más oscuro en hover */
         }
 
         /* Estilo para la barra de scroll personalizada */
         .custom-scrollbar::-webkit-scrollbar {
-            width: 8px; /* Ancho de la barra */
+            width: 5px; /* Ancho de la barra reducido */
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
             background: #e2e8f0; /* Fondo del track */
-            border-radius: 4px;
+            border-radius: 2.5px; /* Radio reducido */
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #94a3b8; /* Color del thumb */
-            border-radius: 4px;
+            border-radius: 2.5px; /* Radio reducido */
         }
 
          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -208,21 +221,21 @@
 
         /* Animación de escalado para resultados */
         .animate-scale-in {
-            animation: scaleIn 0.3s ease-out forwards; /* forwards mantiene el estado final */
+            animation: scaleIn 0.25s ease-out forwards; /* Reducir duración */
             opacity: 0; /* Inicialmente invisible */
         }
 
         /* Keyframes para la animación de escalado */
         @keyframes scaleIn {
-            from { transform: scale(0.98); opacity: 0; }
+            from { transform: scale(0.995); opacity: 0; } /* Escala ligeramente menor */
             to { transform: scale(1); opacity: 1; }
         }
 
         /* Estilos para el switch (toggle) */
         .switch-container {
-            --switch-width: 48px; /* Ancho del switch */
-            --switch-height: 28px; /* Altura del switch */
-            --thumb-size: 22px; /* Tamaño del thumb */
+            --switch-width: 36px; /* Ancho del switch reducido */
+            --switch-height: 20px; /* Altura del switch reducida */
+            --thumb-size: 16px; /* Tamaño del thumb reducido */
             position: relative;
             display: inline-block;
             cursor: pointer; /* Cursor de puntero */
@@ -234,18 +247,18 @@
             background-color: #cbd5e1; /* Gris claro por defecto */
             border-radius: 9999px; /* Completamente redondeado */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra interna */
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08); /* Sombra interna más pequeña */
         }
 
         .switch-thumb {
             position: absolute;
-            top: 3px; /* Posicionamiento */
-            left: 3px; /* Posicionamiento */
+            top: 2px; /* Posicionamiento ajustado */
+            left: 2px; /* Posicionamiento ajustado */
             width: var(--thumb-size);
             height: var(--thumb-size);
             background-color: white; /* Color blanco */
             border-radius: 9999px; /* Completamente redondeado */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra del thumb */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); /* Sombra del thumb reducida */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -256,30 +269,30 @@
 
         /* Posición del thumb cuando el switch está activado */
         input:checked ~ .switch-thumb {
-            transform: translateX(calc(var(--switch-width) - var(--thumb-size) - 6px)); /* Mover a la derecha */
+            transform: translateX(calc(var(--switch-width) - var(--thumb-size) - 4px)); /* Mover a la derecha ajustado */
         }
 
         /* Transición para el contenedor de mes incompleto */
         .mes-incompleto-container {
-            transition: all 0.4s ease-in-out; /* Transición más suave */
+            transition: all 0.3s ease-in-out; /* Transición más rápida */
             overflow: hidden; /* Ocultar contenido durante la transición de altura */
         }
 
          /* Estilo para los títulos de sección */
         .section-title {
-            font-size: 0.875rem; /* text-sm */
+            font-size: 0.8rem; /* Tamaño de fuente más pequeño */
             font-weight: 700; /* font-bold */
             color: #4b5563; /* gray-600 */
             text-transform: uppercase;
             letter-spacing: 0.05em; /* tracking-wide */
-            margin-bottom: 1rem; /* mb-4 */
-            border-bottom: 2px solid #e5e7eb; /* Separador visual */
-            padding-bottom: 0.5rem;
+            margin-bottom: 0.6rem; /* Reducir margen inferior */
+            border-bottom: 1px solid #e5e7eb; /* Separador visual más sutil */
+            padding-bottom: 0.4rem; /* Reducir padding inferior */
         }
 
         /* Estilo para los elementos dentro de las secciones con padding vertical */
         .section-item {
-            padding: 0.75rem 0; /* py-3 */
+            padding: 0.5rem 0; /* py-3 reducido */
             border-bottom: 1px solid #f3f4f6; /* Separador sutil entre items */
         }
 
@@ -287,36 +300,77 @@
             border-bottom: none; /* Eliminar borde del último item */
         }
 
+        /* Espacio dentro de los items de sección */
+        .section-item > div {
+             margin-top: 0.4rem; /* Reducir espacio interno */
+        }
+
+         /* Espacio en el contenido de horas extras */
+        #horas-extras-content > div {
+            padding-bottom: 0.6rem; /* Reducir padding inferior */
+             margin-bottom: 0.6rem; /* Reducir margen inferior */
+        }
+
+         #horas-extras-content > div:last-child {
+             padding-bottom: 0;
+             margin-bottom: 0;
+         }
+
+         /* Espacio en los items del resumen */
+         #resultado > div {
+             margin-bottom: 0.2rem; /* Reducir espacio */
+              font-size: 0.75rem; /* text-xs */
+         }
+         #resultado > div:last-child {
+             margin-bottom: 0;
+         }
+         #resultado > strong {
+             display: block; /* Asegurar que el strong esté en su propia línea */
+             margin-top: 0.6rem; /* Espacio encima del título del resumen */
+             font-size: 0.9rem; /* Ajustar tamaño */
+         }
+          #resultado > strong:first-child {
+             margin-top: 0;
+          }
+
+          #resultado h4 {
+              font-size: 0.9rem; /* Ajustar tamaño del título del desglose */
+              margin-bottom: 0.5rem; /* Ajustar margen */
+          }
+
+          #resultado .border-b {
+              margin-top: 0.8rem; /* Ajustar margen del separador */
+              margin-bottom: 0.8rem; /* Ajustar margen del separador */
+          }
+
+          #resultado .text-pink-600.text-xl {
+              font-size: 1.1rem; /* Ajustar tamaño del total final */
+          }
+
+
     </style>
 </head>
 <body class="min-h-screen">
     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
-        <div class="max-w-md mx-auto px-4 py-4">
-            <h1 class="text-2xl font-bold text-gray-800 text-center">
-                <span class="bg-gradient-to-r from-red-600 to-pink-500 bg-clip-text text-transparent">
+        <div class="max-w-md mx-auto px-4 py-2.5"> <h1 class="text-lg font-bold text-gray-800 text-center"> <span class="bg-gradient-to-r from-red-600 to-pink-500 bg-clip-text text-transparent">
                     Calculadora Nómina Colebega CSIF
                 </span>
             </h1>
         </div>
     </header>
 
-    <main class="max-w-md mx-auto px-4 py-8 space-y-6">
-        <div data-categoria-container class="card p-6 card-entrance">
+    <main class="max-w-md mx-auto px-4 py-5 space-y-3.5"> <div data-categoria-container class="card card-entrance">
             <h3 class="section-title">Categoría base</h3>
-            <div class="grid grid-cols-4 gap-3">
-                <button data-categoria="B3" class="py-3 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">B3</button>
-                <button data-categoria="B4" class="py-3 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">B4</button>
-                <button data-categoria="C5" class="py-3 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">C5</button>
-                <button data-categoria="C6" class="py-3 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">C6</button>
+            <div class="grid grid-cols-4 gap-1.5"> <button data-categoria="B3" class="py-1.5 text-sm font-medium rounded-md bg-gray-100 hover:bg-gray-200 transition-colors">B3</button> <button data-categoria="B4" class="py-1.5 text-sm font-medium rounded-md bg-gray-100 hover:bg-gray-200 transition-colors">B4</button>
+                <button data-categoria="C5" class="py-1.5 text-sm font-medium rounded-md bg-gray-100 hover:bg-gray-200 transition-colors">C5</button>
+                <button data-categoria="C6" class="py-1.5 text-sm font-medium rounded-md bg-gray-100 hover:bg-gray-200 transition-colors">C6</button>
             </div>
         </div>
 
-        <div class="card p-6 card-entrance" style="animation-delay: 0.1s;">
+        <div class="card card-entrance" style="animation-delay: 0.1s;">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-base font-medium text-gray-800">Calcular mes incompleto</h3>
-                    <p class="text-xs text-gray-500 mt-1">Activar para introducir días sueltos por categoría</p>
-                </div>
+                    <h3 class="text-sm font-medium text-gray-800">Calcular mes incompleto</h3> <p class="text-xs text-gray-500 mt-0.5">Activar para introducir días sueltos por categoría</p> </div>
                 <label class="switch-container">
                     <input type="checkbox" id="mes-incompleto-checkbox" class="sr-only peer">
                     <div class="switch-track"></div>
@@ -325,75 +379,53 @@
             </div>
         </div>
 
-        <div id="dias-por-categoria-container" class="card p-6 mt-4 hidden mes-incompleto-container" style="animation-delay: 0.2s;">
-            <h3 class="section-title">Días trabajados por categoría</h3>
-            <div class="space-y-4" id="dias-por-categoria-list">
-                </div>
-            <div class="mt-6 pt-4 border-t border-gray-200 text-sm text-gray-700 font-semibold">
-                Total días: <span id="total-dias-mes-incompleto" class="font-bold text-pink-600">0</span>/30
+        <div id="dias-por-categoria-container" class="card mt-3 hidden mes-incompleto-container" style="animation-delay: 0.2s;"> <h3 class="section-title">Días trabajados por categoría</h3>
+            <div class="space-y-3" id="dias-por-categoria-list"> </div>
+            <div class="mt-3 pt-2 border-t border-gray-200 text-xs text-gray-700 font-semibold"> Total días: <span id="total-dias-mes-incompleto" class="font-bold text-pink-600">0</span>/30
             </div>
         </div>
 
-        <div id="dias-trabajados-container" class="card p-6 card-entrance" style="animation-delay: 0.2s;">
+        <div id="dias-trabajados-container" class="card card-entrance" style="animation-delay: 0.2s;">
             <h3 class="section-title">Días en categorías superiores</h3>
-            <div class="space-y-4">
-                 </div>
+            <div class="space-y-3"> </div>
         </div>
 
-        <div id="nocturnidad-container" class="card p-6 card-entrance" style="animation-delay: 0.3s;">
+        <div id="nocturnidad-container" class="card card-entrance" style="animation-delay: 0.3s;">
             <h3 class="section-title">Nocturnidad (días de noche)</h3>
-            <div class="space-y-4">
-                 </div>
+            <div class="space-y-3"> </div>
         </div>
 
-        <div id="arrancadores-section" class="card p-6 hidden card-entrance" style="animation-delay: 0.4s;">
+        <div id="arrancadores-section" class="card hidden card-entrance" style="animation-delay: 0.4s;">
             <h3 class="section-title">Arrancadores</h3>
-            <div class="space-y-5">
-                <div id="arrancador-c5-container" class="flex items-center justify-between section-item">
+            <div class="space-y-3.5"> <div id="arrancador-c5-container" class="flex items-center justify-between section-item">
                     <span class="text-sm font-medium text-gray-700">Arrancador C5</span>
-                    <div class="flex items-center gap-3">
-                        <button onclick="cambiarArrancador('C5', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
-                        <span id="arrancador-C5" class="w-8 text-center font-bold text-gray-800">0</span>
-                        <button onclick="cambiarArrancador('C5', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
+                    <div class="flex items-center gap-1.5"> <button onclick="cambiarArrancador('C5', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
+                        <span id="arrancador-C5" class="w-6 text-center font-bold text-gray-800">0</span> <button onclick="cambiarArrancador('C5', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
                     </div>
-                    <span class="text-xs text-gray-500 ml-2">22,26€/día</span>
-                </div>
+                    <span class="text-xs text-gray-500 ml-1">22,26€/día</span> </div>
                 <div class="flex items-center justify-between section-item">
                     <span class="text-sm font-medium text-gray-700">Arrancador C6</span>
-                    <div class="flex items-center gap-3">
-                        <button onclick="cambiarArrancador('C6', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
-                        <span id="arrancador-C6" class="w-8 text-center font-bold text-gray-800">0</span>
-                        <button onclick="cambiarArrancador('C6', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
+                    <div class="flex items-center gap-1.5"> <button onclick="cambiarArrancador('C6', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
+                        <span id="arrancador-C6" class="w-6 text-center font-bold text-gray-800">0</span> <button onclick="cambiarArrancador('C6', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
                     </div>
-                    <span class="text-xs text-gray-500 ml-2">23,25€/día</span>
-                </div>
+                    <span class="text-xs text-gray-500 ml-1">23,25€/día</span> </div>
             </div>
         </div>
 
-        <div id="horas-extras-container" class="card p-6 card-entrance" style="animation-delay: 0.5s;">
+        <div id="horas-extras-container" class="card card-entrance" style="animation-delay: 0.5s;">
             <h3 class="section-title">Horas Extras</h3>
-            <div class="space-y-6" id="horas-extras-content">
-                </div>
+            <div class="space-y-3.5" id="horas-extras-content"> </div>
         </div>
 
-        <div class="card p-6 card-entrance" style="animation-delay: 0.6s;">
+        <div class="card card-entrance" style="animation-delay: 0.6s;">
             <h3 class="section-title">4º Turno</h3>
-            <div class="space-y-6">
-                <div class="space-y-3">
-                    <h4 class="text-sm font-semibold text-center text-gray-700">Sábado</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 p-4 rounded-xl text-center border border-gray-100">
-                            <p class="text-xs text-gray-500 mb-3 font-medium">8 Horas</p>
-                            <div class="flex items-center justify-center gap-3">
-                                <button onclick="cambiarHoras('horasSabado8', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
+            <div class="space-y-3.5"> <div class="space-y-1.5"> <h4 class="text-sm font-semibold text-center text-gray-700">Sábado</h4>
+                    <div class="grid grid-cols-2 gap-2.5"> <div class="bg-gray-50 p-2.5 rounded-md text-center border border-gray-100"> <p class="text-xs text-gray-500 mb-1.5 font-medium">8 Horas</p> <div class="flex items-center justify-center gap-1.5"> <button onclick="cambiarHoras('horasSabado8', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
                                 <input type="number" id="horasSabado8" class="stepper-input" value="0" readonly>
                                 <button onclick="cambiarHoras('horasSabado8', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
                             </div>
                         </div>
-                        <div class="bg-gray-50 p-4 rounded-xl text-center border border-gray-100">
-                            <p class="text-xs text-gray-500 mb-3 font-medium">12 Horas</p>
-                            <div class="flex items-center justify-center gap-3">
-                                <button onclick="cambiarHoras('horasSabado12', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
+                        <div class="bg-gray-50 p-2.5 rounded-md text-center border border-gray-100"> <p class="text-xs text-gray-500 mb-1.5 font-medium">12 Horas</p> <div class="flex items-center justify-center gap-1.5"> <button onclick="cambiarHoras('horasSabado12', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
                                 <input type="number" id="horasSabado12" class="stepper-input" value="0" readonly>
                                 <button onclick="cambiarHoras('horasSabado12', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
                             </div>
@@ -401,21 +433,13 @@
                     </div>
                 </div>
 
-                <div class="space-y-3">
-                    <h4 class="text-sm font-semibold text-center text-gray-700">Domingo</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                         <div class="bg-gray-50 p-4 rounded-xl text-center border border-gray-100">
-                            <p class="text-xs text-gray-500 mb-3 font-medium">8 Horas</p>
-                            <div class="flex items-center justify-center gap-3">
-                                <button onclick="cambiarHoras('horasDomingo8', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
+                <div class="space-y-1.5"> <h4 class="text-sm font-semibold text-center text-gray-700">Domingo</h4>
+                    <div class="grid grid-cols-2 gap-2.5"> <div class="bg-gray-50 p-2.5 rounded-md text-center border border-gray-100"> <p class="text-xs text-gray-500 mb-1.5 font-medium">8 Horas</p> <div class="flex items-center justify-center gap-1.5"> <button onclick="cambiarHoras('horasDomingo8', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
                                 <input type="number" id="horasDomingo8" class="stepper-input" value="0" readonly>
                                 <button onclick="cambiarHoras('horasDomingo8', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
                             </div>
                         </div>
-                        <div class="bg-gray-50 p-4 rounded-xl text-center border border-gray-100">
-                            <p class="text-xs text-gray-500 mb-3 font-medium">12 Horas</p>
-                            <div class="flex items-center justify-center gap-3">
-                                <button onclick="cambiarHoras('horasDomingo12', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
+                        <div class="bg-gray-50 p-2.5 rounded-md text-center border border-gray-100"> <p class="text-xs text-gray-500 mb-1.5 font-medium">12 Horas</p> <div class="flex items-center justify-center gap-1.5"> <button onclick="cambiarHoras('horasDomingo12', -1)" class="stepper-btn bg-pink-50 text-pink-600">-</button>
                                 <input type="number" id="horasDomingo12" class="stepper-input" value="0" readonly>
                                 <button onclick="cambiarHoras('horasDomingo12', 1)" class="stepper-btn bg-green-50 text-green-600">+</button>
                             </div>
@@ -425,13 +449,9 @@
             </div>
         </div>
 
-        <div class="space-y-4 card-entrance" style="animation-delay: 0.7s;">
-            <div class="card p-6">
-                <div class="flex items-center justify-between">
+        <div class="space-y-3 card-entrance" style="animation-delay: 0.7s;"> <div class="card"> <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-base font-medium text-gray-800">Plus de asistencia</h3>
-                        <p class="text-xs text-gray-500 mt-1">44,79€</p>
-                    </div>
+                        <h3 class="text-sm font-medium text-gray-800">Plus de asistencia</h3> <p class="text-xs text-gray-500 mt-0.5">44,79€</p> </div>
                     <label class="switch-container">
                         <input type="checkbox" id="plus-asistencia-checkbox" class="sr-only peer">
                         <div class="switch-track"></div>
@@ -440,12 +460,9 @@
                 </div>
             </div>
 
-            <div class="card p-6 card-entrance" style="animation-delay: 0.8s;">
-                <div class="flex items-center justify-between">
+            <div class="card card-entrance" style="animation-delay: 0.8s;"> <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-base font-medium text-gray-800">Adscripción fin de semana</h3>
-                        <p class="text-xs text-gray-500 mt-1">110,63€</p>
-                    </div>
+                        <h3 class="text-sm font-medium text-gray-800">Adscripción fin de semana</h3> <p class="text-xs text-gray-500 mt-0.5">110,63€</p> </div>
                     <label class="switch-container">
                         <input type="checkbox" id="adscripcion-checkbox" class="sr-only peer">
                         <div class="switch-track"></div>
@@ -455,15 +472,11 @@
             </div>
         </div>
 
-        <button id="calcular-btn" class="floating-button w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-4 px-6 rounded-xl transition-all text-lg mt-8">
-            Calcular Nómina
+        <button id="calcular-btn" class="floating-button btn-rojo w-full font-semibold py-3 px-5 rounded-lg transition-all text-lg mt-6"> Calcular Nómina
         </button>
 
-        <div id="resultado-container" class="hidden mt-8">
-            <div class="card p-6 animate-scale-in">
-                <h3 class="section-title">Resultados del Cálculo</h3>
-                <div id="resultado" class="text-sm space-y-3 custom-scrollbar max-h-96 overflow-y-auto">
-                    </div>
+        <div id="resultado-container" class="hidden mt-6"> <div class="card animate-scale-in"> <h3 class="section-title">Resultados del Cálculo</h3>
+                <div id="resultado" class="text-xs space-y-2 custom-scrollbar max-h-80 overflow-y-auto"> </div>
             </div>
         </div>
     </main>
@@ -669,7 +682,8 @@
 
         // Función para actualizar la lista de días trabajados en categorías superiores
         function actualizarDiasTrabajados() {
-            const container = document.getElementById('dias-trabajados-container').querySelector('.space-y-4');
+            // Corregir la selección del contenedor para usar la clase correcta 'space-y-3'
+            const container = document.getElementById('dias-trabajados-container').querySelector('.space-y-3');
             container.innerHTML = ''; // Limpiar contenido
 
             const categorias = categoriasSuperiores(estado.categoria);
@@ -698,7 +712,7 @@
 
         // Función para actualizar la lista de nocturnidad
         function actualizarNocturnidad() {
-            const container = document.getElementById('nocturnidad-container').querySelector('.space-y-4');
+            const container = document.getElementById('nocturnidad-container').querySelector('.space-y-3');
             container.innerHTML = ''; // Limpiar contenido
 
             const categorias = estado.mesIncompleto ?
@@ -1211,3 +1225,4 @@
     </script>
 </body>
 </html>
+
