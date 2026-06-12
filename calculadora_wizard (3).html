@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Calculadora Nómina · CSIF Colebega</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rojo: #c8102e;
+  --rojo-dark: #9e0c24;
+  --rojo-light: #fbeef1;
+  --rojo-mid: #f5c6cf;
+  --gold: #f0a500;
+  --gold-light: #fef7e6;
+  --surface: #ffffff;
+  --surface-2: #f8f9fb;
+  --surface-3: #f1f3f7;
+  --border: #e2e5ec;
+  --border-dark: #cdd1db;
+  --text: #111827;
+  --text-2: #4b5563;
+  --text-3: #9ca3af;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.07);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { touch-action: manipulation; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f2f7;
+  min-height: 100vh;
+  color: var(--text);
+  padding-bottom: 3rem;
+}
+
+/* HEADER */
+.app-header {
+  background: var(--rojo);
+  padding: 1.5rem 1.25rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.app-header::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 20px;
+  width: 240px; height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.header-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.header-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #f0a500;
+}
+.app-header h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.6rem; font-weight: 700;
+  color: #fff; line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+.app-header p {
+  font-size: 0.85rem; color: rgba(255,255,255,0.72);
+  line-height: 1.5;
+}
+
+/* PROGRESS */
+.progress-wrap {
+  max-width: 480px; margin: 0 auto;
+  padding: 1.25rem 1.25rem 0;
+}
+.step-track {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 0.5rem;
+}
+.step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text-3);
+  cursor: default;
+}
+.step-dot.done {
+  background: var(--rojo); border-color: var(--rojo); color: #fff;
+}
+.step-dot.active {
+  background: var(--rojo); border-color: var(--rojo); color: #fff;
+  box-shadow: 0 0 0 4px rgba(200,16,46,0.15);
+}
+.step-line {
+  flex: 1; height: 2px;
+  background: var(--border);
+  transition: background 0.3s ease;
+}
+.step-line.done { background: var(--rojo); }
+.progress-label {
+  font-size: 11px; color: var(--text-3); font-weight: 500;
+  text-align: right;
+}
+.progress-label span { color: var(--rojo); font-weight: 700; }
+
+/* MAIN */
+main { max-width: 480px; margin: 0 auto; padding: 1rem 1.25rem; }
+
+/* CARDS */
+.step-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: none;
+  animation: slideUp 0.35s ease forwards;
+}
+.step-card.active { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--rojo);
+  margin-bottom: 0.4rem;
+}
+.step-question {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--text); margin-bottom: 0.3rem; line-height: 1.3;
+}
+.step-hint {
+  font-size: 0.8rem; color: var(--text-3); margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+
+/* OPCIONES GRID */
+.options-grid {
+  display: grid; gap: 10px;
+}
+.options-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.options-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+.option-btn {
+  position: relative;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+.option-btn:hover {
+  border-color: var(--rojo-mid);
+  background: var(--rojo-light);
+}
+.option-btn.selected {
+  border-color: var(--rojo);
+  background: var(--rojo-light);
+}
+.option-btn.selected::after {
+  content: '✓';
+  position: absolute; top: 8px; right: 10px;
+  width: 18px; height: 18px;
+  background: var(--rojo); color: #fff;
+  border-radius: 50%;
+  font-size: 10px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 18px; text-align: center;
+}
+.option-label {
+  font-size: 0.9rem; font-weight: 600; color: var(--text);
+  display: block;
+}
+.option-sub {
+  font-size: 0.75rem; color: var(--text-2); margin-top: 2px;
+  display: block;
+}
+.option-btn.selected .option-label { color: var(--rojo-dark); }
+
+/* TOGGLE */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.85rem 1rem;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.toggle-row:hover { border-color: var(--border-dark); }
+.toggle-row.on {
+  border-color: var(--rojo);
+  background: var(--rojo-light);
+}
+.toggle-info { flex: 1; }
+.toggle-label {
+  font-size: 0.9rem; font-weight: 600; color: var(--text); display: block;
+}
+.toggle-sub {
+  font-size: 0.75rem; color: var(--text-2); margin-top: 2px; display: block;
+}
+.toggle-row.on .toggle-label { color: var(--rojo-dark); }
+.toggle-switch {
+  width: 42px; height: 24px;
+  background: var(--border-dark); border-radius: 12px;
+  position: relative; transition: background 0.3s;
+  flex-shrink: 0; margin-left: 12px;
+}
+.toggle-switch::after {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: #fff; border-radius: 50%;
+  transition: transform 0.3s;
+}
+.toggle-row.on .toggle-switch { background: var(--rojo); }
+.toggle-row.on .toggle-switch::after { transform: translateX(18px); }
+
+/* STEPPER */
+.stepper-group { display: flex; flex-direction: column; gap: 10px; }
+.stepper-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.stepper-row-label { flex: 1; }
+.stepper-row-name {
+  font-size: 0.875rem; font-weight: 600; color: var(--text); display: block;
+}
+.stepper-row-price {
+  font-size: 0.75rem; color: var(--text-3); margin-top: 1px; display: block;
+}
+.stepper-ctrl {
+  display: flex; align-items: center; gap: 10px;
+}
+.step-btn {
+  width: 30px; height: 30px; border-radius: 8px;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700;
+  transition: all 0.15s ease;
+}
+.step-btn.minus {
+  background: #fce8ec; color: var(--rojo);
+}
+.step-btn.plus {
+  background: #d1fae5; color: var(--green);
+}
+.step-btn:hover { filter: brightness(0.93); transform: scale(1.05); }
+.step-val {
+  width: 32px; text-align: center;
+  font-size: 1rem; font-weight: 700; color: var(--text);
+}
+.stepper-row.highlighted {
+  border-color: var(--rojo-mid);
+  background: #fff9fa;
+}
+.stepper-row.highlighted .stepper-row-name { color: var(--rojo-dark); }
+
+/* 4º TURNO grid */
+.turno-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.turno-box {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 0.75rem;
+  text-align: center;
+}
+.turno-box-day {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-2); margin-bottom: 0.25rem;
+}
+.turno-box-hours {
+  font-size: 0.75rem; color: var(--text-3); margin-bottom: 0.6rem;
+}
+.turno-ctrl {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.turno-val {
+  width: 28px; text-align: center;
+  font-size: 1rem; font-weight: 700; color: var(--text);
+}
+
+/* NAV BUTTONS */
+.nav-row {
+  display: flex; gap: 10px; margin-top: 1.25rem;
+}
+.btn-back {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.875rem; font-weight: 600;
+  color: var(--text-2); cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-back:hover { background: var(--surface-3); border-color: var(--border-dark); }
+.btn-next {
+  flex: 1;
+  background: var(--rojo);
+  border: none; border-radius: 12px;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.95rem; font-weight: 700;
+  color: #fff; cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-next:hover { background: var(--rojo-dark); transform: translateY(-1px); }
+.btn-next:active { transform: translateY(0); }
+.btn-next .arrow {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.btn-calcular {
+  width: 100%;
+  background: var(--rojo);
+  border: none; border-radius: 14px;
+  padding: 1.1rem 1.5rem;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  color: #fff; cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-top: 1.25rem;
+  letter-spacing: 0.01em;
+}
+.btn-calcular:hover { background: var(--rojo-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,16,46,0.3); }
+.btn-calcular svg { width: 20px; height: 20px; }
+
+/* LIVE TOTAL FLOATING */
+.live-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  display: none; align-items: center; justify-content: space-between;
+  z-index: 50;
+}
+.live-bar.show { display: flex; }
+.live-label { font-size: 0.75rem; color: var(--text-3); font-weight: 500; }
+.live-amount {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.25rem; font-weight: 700; color: var(--rojo);
+}
+.live-note { font-size: 0.7rem; color: var(--text-3); }
+
+/* RESULTADO */
+.result-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  display: none;
+}
+.result-card.show { display: block; animation: slideUp 0.4s ease; }
+.result-hero {
+  background: var(--rojo);
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.result-hero::before {
+  content: ''; position: absolute;
+  top: -30px; right: -30px;
+  width: 130px; height: 130px; border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+.result-hero-label {
+  font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;
+}
+.result-total {
+  font-family: 'Sora', sans-serif;
+  font-size: 2.8rem; font-weight: 700; color: #fff;
+  line-height: 1; margin-bottom: 0.3rem;
+}
+.result-total-label {
+  font-size: 0.8rem; color: rgba(255,255,255,0.65);
+}
+.result-chips {
+  display: flex; gap: 8px; justify-content: center; margin-top: 1rem; flex-wrap: wrap;
+}
+.result-chip {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 0.75rem; color: rgba(255,255,255,0.85); font-weight: 500;
+}
+.result-body { padding: 1.25rem 1.5rem; }
+.result-section-title {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-3);
+  margin: 1rem 0 0.6rem; padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.result-section-title:first-child { margin-top: 0; }
+.result-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 5px 0;
+  font-size: 0.85rem;
+}
+.result-row-label { color: var(--text-2); flex: 1; padding-right: 8px; }
+.result-row-amount { font-weight: 600; color: var(--text); white-space: nowrap; }
+.result-row.sub { padding-left: 12px; }
+.result-row.sub .result-row-label { color: var(--text-3); font-size: 0.8rem; }
+.result-row.sub .result-row-amount { font-size: 0.8rem; color: var(--text-2); }
+.result-divider {
+  height: 1px; background: var(--border); margin: 0.6rem 0;
+}
+.result-actions {
+  padding: 0 1.5rem 1.25rem;
+  display: flex; gap: 10px;
+}
+.btn-reset {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  font-size: 0.875rem; font-weight: 600;
+  color: var(--text-2); cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.btn-reset:hover { background: var(--surface-3); }
+
+/* SUMMARY SIDEBAR */
+.summary-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  display: none;
+}
+.summary-bar.show { display: block; }
+.summary-title {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-3); margin-bottom: 0.6rem;
+}
+.summary-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.summary-tag {
+  background: var(--rojo-light);
+  border: 1px solid var(--rojo-mid);
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: 0.75rem; font-weight: 600; color: var(--rojo-dark);
+}
+
+/* MODAL alerta */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none; align-items: center; justify-content: center;
+  padding: 1.5rem; z-index: 100;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  max-width: 320px; width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+.modal-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--gold-light);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 24px;
+}
+.modal-box h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;
+}
+.modal-box p { font-size: 0.85rem; color: var(--text-2); line-height: 1.5; }
+.modal-btn {
+  margin-top: 1.25rem; width: 100%;
+  background: var(--rojo); border: none; border-radius: 10px;
+  padding: 0.75rem; font-size: 0.9rem; font-weight: 700;
+  color: #fff; cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 380px) {
+  .result-total { font-size: 2.2rem; }
+  .options-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div style="max-width:480px;margin:0 auto;">
+    <div class="header-badge">CSIF · Colebega</div>
+    <h1>Calcula tu nómina</h1>
+    <p>Responde las preguntas y obtén el desglose completo de tus haberes en segundos.</p>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="step-track" id="stepTrack"></div>
+  <div class="progress-label">Paso <span id="stepNum">1</span> de <span id="stepTotal">7</span></div>
+</div>
+
+<main>
+  <div class="summary-bar" id="summaryBar">
+    <div class="summary-title">Tu selección hasta ahora</div>
+    <div class="summary-tags" id="summaryTags"></div>
+  </div>
+
+  <!-- PASO 1: Categoría base -->
+  <div class="step-card active" id="step-1">
+    <div class="step-eyebrow">Paso 1 · Categoría</div>
+    <div class="step-question">¿Cuál es tu categoría base este mes?</div>
+    <div class="step-hint">Selecciona el grupo salarial con el que figuras en tu contrato.</div>
+    <div class="options-grid cols-4">
+      <button class="option-btn" data-group="cat" data-val="B3" onclick="selectOption(this,'cat')">
+        <span class="option-label" style="font-size:1.1rem; text-align:center; display:block;">B3</span>
+      </button>
+      <button class="option-btn" data-group="cat" data-val="B4" onclick="selectOption(this,'cat')">
+        <span class="option-label" style="font-size:1.1rem; text-align:center; display:block;">B4</span>
+      </button>
+      <button class="option-btn" data-group="cat" data-val="C5" onclick="selectOption(this,'cat')">
+        <span class="option-label" style="font-size:1.1rem; text-align:center; display:block;">C5</span>
+      </button>
+      <button class="option-btn" data-group="cat" data-val="C6" onclick="selectOption(this,'cat')">
+        <span class="option-label" style="font-size:1.1rem; text-align:center; display:block;">C6</span>
+      </button>
+    </div>
+    <div class="nav-row">
+      <button class="btn-next" onclick="goNext(1)" id="btn-next-1" disabled>
+        Siguiente <div class="arrow">→</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 2: Mes completo o incompleto -->
+  <div class="step-card" id="step-2">
+    <div class="step-eyebrow">Paso 2 · Días trabajados</div>
+    <div class="step-question">¿Has trabajado el mes completo?</div>
+    <div class="step-hint">Un mes completo equivale a 30 días. Si faltaste o empezaste a mitad, elige mes incompleto.</div>
+    <div class="options-grid">
+      <button class="option-btn" data-group="mescomp" data-val="completo" onclick="selectOption(this,'mescomp')">
+        <span class="option-label">Sí, mes completo</span>
+        <span class="option-sub">30 días en mi categoría base</span>
+      </button>
+      <button class="option-btn" data-group="mescomp" data-val="incompleto" onclick="selectOption(this,'mescomp')">
+        <span class="option-label">No, mes incompleto</span>
+        <span class="option-sub">Introduciré los días por categoría</span>
+      </button>
+    </div>
+    <div id="dias-incompleto-wrap" style="display:none; margin-top:1rem;">
+      <div class="step-hint" style="margin-bottom:0.75rem;">¿Cuántos días trabajaste en cada categoría? (Total máx. 30 días)</div>
+      <div class="stepper-group" id="dias-incompleto-list"></div>
+      <div style="margin-top:0.6rem; padding:0.6rem 1rem; background:var(--surface-3); border-radius:8px; font-size:0.8rem; color:var(--text-2); display:flex; justify-content:space-between;">
+        <span>Total días</span>
+        <strong id="total-dias-label" style="color:var(--rojo);">0 / 30</strong>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(2)">← Atrás</button>
+      <button class="btn-next" onclick="goNext(2)" id="btn-next-2" disabled>
+        Siguiente <div class="arrow">→</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 3: Categorías superiores (solo mes completo) -->
+  <div class="step-card" id="step-3">
+    <div class="step-eyebrow">Paso 3 · Categorías superiores</div>
+    <div class="step-question">¿Trabajaste días en categorías superiores?</div>
+    <div class="step-hint">Indica los días que cubriste en categorías más altas que la tuya. Máximo 30 días en total.</div>
+    <div class="stepper-group" id="dias-superiores-list"></div>
+    <div id="no-superiores-msg" style="display:none; padding:1rem; text-align:center; color:var(--text-3); font-size:0.85rem; font-style:italic;">
+      Estás en la categoría máxima (C6). No hay superiores.
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(3)">← Atrás</button>
+      <button class="btn-next" onclick="goNext(3)">
+        Siguiente <div class="arrow">→</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 4: Nocturnidad -->
+  <div class="step-card" id="step-4">
+    <div class="step-eyebrow">Paso 4 · Nocturnidad</div>
+    <div class="step-question">¿Cuántas noches trabajaste?</div>
+    <div class="step-hint">Indica los días de noche por cada categoría en que los realizaste.</div>
+    <div class="stepper-group" id="nocturnidad-list"></div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(4)">← Atrás</button>
+      <button class="btn-next" onclick="goNext(4)">
+        Siguiente <div class="arrow">→</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 5: Horas extras + Arrancadores -->
+  <div class="step-card" id="step-5">
+    <div class="step-eyebrow">Paso 5 · Extras y Arrancadores</div>
+    <div class="step-question">¿Realizaste horas extras o eres arrancador?</div>
+    <div class="step-hint">Horas extras diurnas y nocturnas por categoría. Solo para C5/C6, añade también los arrancadores.</div>
+    <div id="horas-extras-list" class="stepper-group" style="margin-bottom:1rem;"></div>
+    <div id="arrancadores-wrap" style="display:none;">
+      <div style="height:1px; background:var(--border); margin:1rem 0;"></div>
+      <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); margin-bottom:0.6rem;">Arrancadores</div>
+      <div class="stepper-group" id="arrancadores-list"></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(5)">← Atrás</button>
+      <button class="btn-next" onclick="goNext(5)">
+        Siguiente <div class="arrow">→</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 6: 4º Turno -->
+  <div class="step-card" id="step-6">
+    <div class="step-eyebrow">Paso 6 · 4º Turno</div>
+    <div class="step-question">¿Realizaste jornadas de 4º turno?</div>
+    <div class="step-hint">Indica cuántas guardias de 8h y 12h hiciste en sábado y domingo.</div>
+    <div style="margin-bottom:1rem;">
+      <div style="font-size:0.8rem; font-weight:600; color:var(--text-2); margin-bottom:0.6rem; padding-left:2px;">🗓 Sábado</div>
+      <div class="turno-grid">
+        <div class="turno-box">
+          <div class="turno-box-day">8 horas</div>
+          <div class="turno-box-hours">160,96 €/jornada</div>
+          <div class="turno-ctrl">
+            <button class="step-btn minus" onclick="cambiarTurno('horasSabado8',-1)">−</button>
+            <span class="turno-val" id="v-horasSabado8">0</span>
+            <button class="step-btn plus" onclick="cambiarTurno('horasSabado8',1)">+</button>
+          </div>
+        </div>
+        <div class="turno-box">
+          <div class="turno-box-day">12 horas</div>
+          <div class="turno-box-hours">243,89 €/jornada</div>
+          <div class="turno-ctrl">
+            <button class="step-btn minus" onclick="cambiarTurno('horasSabado12',-1)">−</button>
+            <span class="turno-val" id="v-horasSabado12">0</span>
+            <button class="step-btn plus" onclick="cambiarTurno('horasSabado12',1)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.8rem; font-weight:600; color:var(--text-2); margin-bottom:0.6rem; padding-left:2px;">🗓 Domingo</div>
+      <div class="turno-grid">
+        <div class="turno-box">
+          <div class="turno-box-day">8 horas</div>
+          <div class="turno-box-hours">183,91 €/jornada</div>
+          <div class="turno-ctrl">
+            <button class="step-btn minus" onclick="cambiarTurno('horasDomingo8',-1)">−</button>
+            <span class="turno-val" id="v-horasDomingo8">0</span>
+            <button class="step-btn plus" onclick="cambiarTurno('horasDomingo8',1)">+</button>
+          </div>
+        </div>
+        <div class="turno-box">
+          <div class="turno-box-day">12 horas</div>
+          <div class="turno-box-hours">278,66 €/jornada</div>
+          <div class="turno-ctrl">
+            <button class="step-btn minus" onclick="cambiarTurno('horasDomingo12',-1)">−</button>
+            <span class="turno-val" id="v-horasDomingo12">0</span>
+            <button class="step-btn plus" onclick="cambiarTurno('horasDomingo12',1)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(6)">← Atrás</button>
+      <button class="btn-next" onclick="goNext(6)">
+        Siguiente <div class="arrow">→</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 7: Plus + Adscripción -->
+  <div class="step-card" id="step-7">
+    <div class="step-eyebrow">Paso 7 · Complementos</div>
+    <div class="step-question">¿Tienes derecho a algún plus adicional?</div>
+    <div class="step-hint">Activa los que correspondan a tu situación este mes.</div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div class="toggle-row" id="toggle-plus" onclick="togglePlus()">
+        <div class="toggle-info">
+          <span class="toggle-label">Plus de asistencia</span>
+          <span class="toggle-sub">47,02 €/mes</span>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+      <div class="toggle-row" id="toggle-adscripcion" onclick="toggleAdscripcion()">
+        <div class="toggle-info">
+          <span class="toggle-label">Adscripción fin de semana</span>
+          <span class="toggle-sub">116,11 €/mes</span>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+    </div>
+    <button class="btn-calcular" onclick="calcularYMostrar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3"/>
+        <path d="M9 15h3l8.5-8.5a1.5 1.5 0 00-3-3L9 12v3z"/>
+      </svg>
+      Calcular mi nómina
+    </button>
+    <div class="nav-row" style="margin-top:0.75rem;">
+      <button class="btn-back" style="width:100%;" onclick="goBack(7)">← Volver al paso anterior</button>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="result-card" id="resultCard">
+    <div class="result-hero">
+      <div class="result-hero-label">Total bruto mensual estimado</div>
+      <div class="result-total" id="res-total">—</div>
+      <div class="result-total-label">euros brutos</div>
+      <div class="result-chips" id="res-chips"></div>
+    </div>
+    <div class="result-body" id="res-body"></div>
+    <div class="result-actions">
+      <button class="btn-reset" onclick="reiniciar()">↩ Nuevo cálculo</button>
+    </div>
+  </div>
+</main>
+
+<!-- Barra viva -->
+<div class="live-bar" id="liveBar">
+  <div>
+    <div class="live-label">Estimación en curso</div>
+    <div class="live-amount" id="live-amount">—</div>
+  </div>
+  <div class="live-note">salario bruto</div>
+</div>
+
+<!-- Modal límite días -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon">⚠️</div>
+    <h3>Límite alcanzado</h3>
+    <p>No puedes superar los 30 días trabajados en total entre todas las categorías.</p>
+    <button class="modal-btn" onclick="document.getElementById('modal').classList.remove('show')">Entendido</button>
+  </div>
+</div>
+
+<script>
+const STEPS = 7;
+let currentStep = 1;
+
+const estado = {
+  categoria: null,
+  mesIncompleto: false,
+  diasPorCategoria: { B3: 0, B4: 0, C5: 0, C6: 0 },
+  diasTrabajados: { B4: 0, C5: 0, C6: 0 },
+  nocturnidad: { B3: 0, B4: 0, C5: 0, C6: 0 },
+  arrancadores: { C5: 0, C6: 0 },
+  horasExtras: { B3: 0, B4: 0, C5: 0, C6: 0 },
+  horasNocturnas: { B3: 0, B4: 0, C5: 0, C6: 0 },
+  horasSabado8: 0, horasSabado12: 0,
+  horasDomingo8: 0, horasDomingo12: 0,
+  plusAsistencia: false,
+  adscripcion: false
+};
+
+const salarios = {
+  B3: { base: 2028.49, complemento: 317.02 },
+  B4: { base: 2028.49, complemento: 617.56 },
+  C5: { base: 2231.25, complemento: 727.40 },
+  C6: { base: 2231.25, complemento: 1184.03 }
+};
+const preciosExtras = {
+  B3: { extra: 26.78, nocturna: 37.50 },
+  B4: { extra: 28.19, nocturna: 39.46 },
+  C5: { extra: 29.48, nocturna: 41.28 },
+  C6: { extra: 29.48, nocturna: 41.28 }
+};
+const preciosNocturnidad = { B3: 31.27, B4: 35.28, C5: 39.45, C6: 45.54 };
+const preciosArrancadores = { C5: 23.36, C6: 24.40 };
+const precioSabado8 = 160.96, precioSabado12 = 243.89;
+const precioDomingo8 = 183.91, precioDomingo12 = 278.66;
+const precioAdscripcion = 116.11, precioPlusAsistencia = 47.02;
+
+const CATS_ORDER = ['B3','B4','C5','C6'];
+
+function categoriasOrdenadas(cat) {
+  const i = CATS_ORDER.indexOf(cat);
+  return CATS_ORDER.slice(i);
+}
+function categoriasSuperiores(cat) {
+  const i = CATS_ORDER.indexOf(cat);
+  return CATS_ORDER.slice(i + 1);
+}
+
+function fmt(n) {
+  return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+
+/* PROGRESS */
+function renderProgress() {
+  const track = document.getElementById('stepTrack');
+  track.innerHTML = '';
+  for (let i = 1; i <= STEPS; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'step-dot' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+    dot.textContent = i < currentStep ? '✓' : i;
+    track.appendChild(dot);
+    if (i < STEPS) {
+      const line = document.createElement('div');
+      line.className = 'step-line' + (i < currentStep ? ' done' : '');
+      track.appendChild(line);
+    }
+  }
+  document.getElementById('stepNum').textContent = currentStep;
+  document.getElementById('stepTotal').textContent = STEPS;
+}
+
+/* SUMMARY BAR */
+function renderSummary() {
+  const bar = document.getElementById('summaryBar');
+  const tags = document.getElementById('summaryTags');
+  if (currentStep <= 1) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  const items = [];
+  if (estado.categoria) items.push('Cat. ' + estado.categoria);
+  if (estado.mesIncompleto) {
+    const dias = Object.entries(estado.diasPorCategoria).filter(([,v])=>v>0).map(([k,v])=>k+': '+v+'d');
+    if (dias.length) items.push(...dias);
+  } else if (estado.categoria) {
+    items.push('Mes completo');
+  }
+  const sup = Object.entries(estado.diasTrabajados).filter(([,v])=>v>0).map(([k,v])=>k+': '+v+'d');
+  items.push(...sup);
+  tags.innerHTML = items.map(t=>`<span class="summary-tag">${t}</span>`).join('');
+}
+
+/* LIVE BAR */
+function actualizarLiveBar() {
+  if (!estado.categoria || currentStep < 2) {
+    document.getElementById('liveBar').classList.remove('show'); return;
+  }
+  document.getElementById('liveBar').classList.add('show');
+  const est = estimarTotal();
+  document.getElementById('live-amount').textContent = fmt(est);
+}
+
+function estimarTotal() {
+  let t = 0;
+  if (estado.mesIncompleto) {
+    Object.entries(estado.diasPorCategoria).forEach(([cat,dias]) => {
+      t += (salarios[cat].base + salarios[cat].complemento) / 30 * dias;
+    });
+  } else if (estado.categoria) {
+    t = salarios[estado.categoria].base + salarios[estado.categoria].complemento;
+    categoriasSuperiores(estado.categoria).forEach(cat => {
+      const d = estado.diasTrabajados[cat];
+      if (d > 0) t += ((salarios[cat].base + salarios[cat].complemento) - (salarios[estado.categoria].base + salarios[estado.categoria].complemento)) / 30 * d;
+    });
+  }
+  const cats = estado.mesIncompleto
+    ? CATS_ORDER.filter(c => estado.diasPorCategoria[c] > 0)
+    : categoriasOrdenadas(estado.categoria || 'B3');
+  cats.forEach(cat => {
+    const baseNoct = estado.mesIncompleto ? preciosNocturnidad[cat] : preciosNocturnidad[estado.categoria || cat];
+    t += estado.nocturnidad[cat] * baseNoct;
+    if (!estado.mesIncompleto && cat !== estado.categoria) t += estado.nocturnidad[cat] * (preciosNocturnidad[cat] - baseNoct);
+    const baseE = estado.mesIncompleto ? preciosExtras[cat].extra : preciosExtras[estado.categoria || cat].extra;
+    const baseN = estado.mesIncompleto ? preciosExtras[cat].nocturna : preciosExtras[estado.categoria || cat].nocturna;
+    t += (estado.horasExtras[cat] || 0) * baseE;
+    t += (estado.horasNocturnas[cat] || 0) * baseN;
+    if (!estado.mesIncompleto && cat !== estado.categoria) {
+      t += (estado.horasExtras[cat] || 0) * (preciosExtras[cat].extra - baseE);
+      t += (estado.horasNocturnas[cat] || 0) * (preciosExtras[cat].nocturna - baseN);
+    }
+  });
+  const arrCats = estado.categoria === 'C6' ? ['C6'] : ['C5','C6'];
+  arrCats.forEach(cat => { t += (estado.arrancadores[cat] || 0) * (preciosArrancadores[cat] || 0); });
+  t += estado.horasSabado8 * precioSabado8 + estado.horasSabado12 * precioSabado12;
+  t += estado.horasDomingo8 * precioDomingo8 + estado.horasDomingo12 * precioDomingo12;
+  if (estado.plusAsistencia) t += precioPlusAsistencia;
+  if (estado.adscripcion) t += precioAdscripcion;
+  return t;
+}
+
+/* OPCIONES */
+function selectOption(btn, group) {
+  document.querySelectorAll(`.option-btn[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const val = btn.dataset.val;
+
+  if (group === 'cat') {
+    estado.categoria = val;
+    // Reset completo de todo lo que depende de la categoría
+    estado.diasPorCategoria = { B3: 0, B4: 0, C5: 0, C6: 0 };
+    estado.diasTrabajados = { B4: 0, C5: 0, C6: 0 };
+    estado.nocturnidad = { B3: 0, B4: 0, C5: 0, C6: 0 };
+    estado.arrancadores = { C5: 0, C6: 0 };
+    estado.horasExtras = { B3: 0, B4: 0, C5: 0, C6: 0 };
+    estado.horasNocturnas = { B3: 0, B4: 0, C5: 0, C6: 0 };
+    // Si ya había mes incompleto seleccionado, re-renderizar los días con la nueva categoría
+    if (estado.mesIncompleto) {
+      renderDiasIncompleto();
+    }
+    document.getElementById('btn-next-1').disabled = false;
+  }
+  if (group === 'mescomp') {
+    estado.mesIncompleto = val === 'incompleto';
+    // Siempre resetear días al cambiar esta opción
+    estado.diasPorCategoria = { B3: 0, B4: 0, C5: 0, C6: 0 };
+    const wrap = document.getElementById('dias-incompleto-wrap');
+    if (estado.mesIncompleto) {
+      wrap.style.display = 'block';
+      renderDiasIncompleto();
+    } else {
+      wrap.style.display = 'none';
+    }
+    document.getElementById('btn-next-2').disabled = false;
+  }
+}
+
+/* DIAS INCOMPLETO */
+function renderDiasIncompleto() {
+  const list = document.getElementById('dias-incompleto-list');
+  list.innerHTML = '';
+  const cats = categoriasOrdenadas(estado.categoria);
+  cats.forEach(cat => {
+    list.appendChild(makeStepperRow(
+      cat, salarios[cat].base.toLocaleString('es-ES',{maximumFractionDigits:2})+'€ base/mes',
+      estado.diasPorCategoria[cat],
+      (v) => {
+        const nuevo = Math.max(0, estado.diasPorCategoria[cat] + v);
+        const total = cats.reduce((a,c)=>a+estado.diasPorCategoria[c],0) - estado.diasPorCategoria[cat] + nuevo;
+        if (total > 30) { document.getElementById('modal').classList.add('show'); return; }
+        estado.diasPorCategoria[cat] = nuevo;
+        renderDiasIncompleto();
+        actualizarLiveBar();
+      }
+    ));
+  });
+  const total = cats.reduce((a,c)=>a+estado.diasPorCategoria[c],0);
+  document.getElementById('total-dias-label').textContent = total + ' / 30';
+  document.getElementById('total-dias-label').style.color = total > 30 ? '#e53e3e' : 'var(--rojo)';
+}
+
+/* DIAS SUPERIORES */
+function renderDiasSuperiores() {
+  const list = document.getElementById('dias-superiores-list');
+  const msg = document.getElementById('no-superiores-msg');
+  const cats = estado.mesIncompleto ? [] : categoriasSuperiores(estado.categoria || 'B3');
+  list.innerHTML = '';
+  if (cats.length === 0) {
+    msg.style.display = 'block'; return;
+  }
+  msg.style.display = 'none';
+  cats.forEach(cat => {
+    list.appendChild(makeStepperRow(
+      cat, 'Diferencia +' + fmt((salarios[cat].base - salarios[estado.categoria].base)/30) + '/día',
+      estado.diasTrabajados[cat],
+      (v) => {
+        const nuevo = Math.max(0, estado.diasTrabajados[cat] + v);
+        const total = Object.values(estado.diasTrabajados).reduce((a,b)=>a+b,0) - estado.diasTrabajados[cat] + nuevo;
+        if (total > 30) { document.getElementById('modal').classList.add('show'); return; }
+        estado.diasTrabajados[cat] = nuevo;
+        renderDiasSuperiores();
+        actualizarLiveBar();
+      }
+    ));
+  });
+}
+
+/* NOCTURNIDAD */
+function renderNocturnidad() {
+  const list = document.getElementById('nocturnidad-list');
+  list.innerHTML = '';
+  const cats = estado.mesIncompleto
+    ? CATS_ORDER.filter(c => estado.diasPorCategoria[c] > 0)
+    : categoriasOrdenadas(estado.categoria || 'B3');
+  if (cats.length === 0) {
+    list.innerHTML = '<div style="color:var(--text-3);font-size:0.85rem;font-style:italic;padding:1rem;text-align:center;">No hay categorías activas.</div>';
+    return;
+  }
+  cats.forEach(cat => {
+    list.appendChild(makeStepperRow(
+      cat, preciosNocturnidad[cat].toFixed(2) + '€/noche',
+      estado.nocturnidad[cat],
+      (v) => {
+        estado.nocturnidad[cat] = Math.max(0, estado.nocturnidad[cat] + v);
+        renderNocturnidad();
+        actualizarLiveBar();
+      }
+    ));
+  });
+  actualizarLiveBar();
+}
+
+/* HORAS EXTRAS */
+function renderHorasExtras() {
+  const list = document.getElementById('horas-extras-list');
+  list.innerHTML = '';
+  const cats = estado.mesIncompleto
+    ? CATS_ORDER.filter(c => estado.diasPorCategoria[c] > 0)
+    : categoriasOrdenadas(estado.categoria || 'B3');
+
+  cats.forEach(cat => {
+    const seccion = document.createElement('div');
+    seccion.style.cssText = 'border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:8px;';
+    seccion.innerHTML = `
+      <div style="background:var(--surface-3); padding:6px 12px; font-size:0.75rem; font-weight:700; color:var(--text-2); text-transform:uppercase; letter-spacing:0.06em;">${cat}</div>
+    `;
+    const inner = document.createElement('div');
+    inner.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:0;';
+
+    ['extras','nocturnas'].forEach((tipo, idx) => {
+      const precio = tipo === 'extras' ? preciosExtras[cat].extra : preciosExtras[cat].nocturna;
+      const label = tipo === 'extras' ? '☀️ Diurnas' : '🌙 Nocturnas';
+      const val = tipo === 'extras' ? estado.horasExtras[cat] : (estado.horasNocturnas[cat]||0);
+      const cell = document.createElement('div');
+      cell.style.cssText = 'padding:12px 10px; text-align:center;' + (idx===0 ? 'border-right:1px solid var(--border);' : '');
+      cell.innerHTML = `
+        <div style="font-size:0.75rem; font-weight:600; color:var(--text-2); margin-bottom:4px;">${label}</div>
+        <div style="font-size:0.7rem; color:var(--text-3); margin-bottom:8px;">${precio.toFixed(2)}€/h</div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
+          <button class="step-btn minus" onclick="cambiarExtra('${cat}','${tipo}',-1)">−</button>
+          <span style="width:28px; text-align:center; font-size:1rem; font-weight:700;" id="ve-${cat}-${tipo}">${val}</span>
+          <button class="step-btn plus" onclick="cambiarExtra('${cat}','${tipo}',1)">+</button>
+        </div>
+      `;
+      inner.appendChild(cell);
+    });
+    seccion.appendChild(inner);
+    list.appendChild(seccion);
+  });
+  actualizarLiveBar();
+}
+
+function cambiarExtra(cat, tipo, v) {
+  if (tipo === 'extras') estado.horasExtras[cat] = Math.max(0, estado.horasExtras[cat] + v);
+  else estado.horasNocturnas[cat] = Math.max(0, (estado.horasNocturnas[cat]||0) + v);
+  const el = document.getElementById(`ve-${cat}-${tipo}`);
+  if (el) el.textContent = tipo === 'extras' ? estado.horasExtras[cat] : estado.horasNocturnas[cat];
+  actualizarLiveBar();
+}
+
+/* ARRANCADORES */
+function renderArrancadores() {
+  const wrap = document.getElementById('arrancadores-wrap');
+  const cats = estado.mesIncompleto
+    ? CATS_ORDER.filter(c => (c==='C5'||c==='C6') && estado.diasPorCategoria[c]>0)
+    : categoriasOrdenadas(estado.categoria||'B3').filter(c=>c==='C5'||c==='C6');
+
+  if (cats.length === 0 && !(['C5','C6'].includes(estado.categoria))) {
+    wrap.style.display = 'none'; return;
+  }
+  if (!estado.mesIncompleto && !['C5','C6'].includes(estado.categoria) && cats.length === 0) {
+    wrap.style.display = 'none'; return;
+  }
+  wrap.style.display = 'block';
+  const list = document.getElementById('arrancadores-list');
+  list.innerHTML = '';
+  const arrCats = estado.categoria === 'C6' ? ['C6'] : ['C5','C6'];
+  arrCats.forEach(cat => {
+    if (!preciosArrancadores[cat]) return;
+    list.appendChild(makeStepperRow(
+      'Arrancador ' + cat, preciosArrancadores[cat].toFixed(2) + '€/día',
+      estado.arrancadores[cat],
+      (v) => {
+        estado.arrancadores[cat] = Math.max(0, estado.arrancadores[cat] + v);
+        renderArrancadores();
+        actualizarLiveBar();
+      }
+    ));
+  });
+  actualizarLiveBar();
+}
+
+/* TURNOS */
+function cambiarTurno(key, v) {
+  estado[key] = Math.max(0, estado[key] + v);
+  document.getElementById('v-' + key).textContent = estado[key];
+  actualizarLiveBar();
+}
+
+/* TOGGLES */
+function togglePlus() {
+  estado.plusAsistencia = !estado.plusAsistencia;
+  document.getElementById('toggle-plus').classList.toggle('on', estado.plusAsistencia);
+  actualizarLiveBar();
+}
+function toggleAdscripcion() {
+  estado.adscripcion = !estado.adscripcion;
+  document.getElementById('toggle-adscripcion').classList.toggle('on', estado.adscripcion);
+  actualizarLiveBar();
+}
+
+/* STEPPER ROW helper */
+function makeStepperRow(name, price, val, onChange) {
+  const div = document.createElement('div');
+  div.className = 'stepper-row' + (val > 0 ? ' highlighted' : '');
+  div.innerHTML = `
+    <div class="stepper-row-label">
+      <span class="stepper-row-name">${name}</span>
+      <span class="stepper-row-price">${price}</span>
+    </div>
+    <div class="stepper-ctrl">
+      <button class="step-btn minus">−</button>
+      <span class="step-val">${val}</span>
+      <button class="step-btn plus">+</button>
+    </div>
+  `;
+  div.querySelector('.minus').addEventListener('click', () => onChange(-1));
+  div.querySelector('.plus').addEventListener('click', () => onChange(1));
+  return div;
+}
+
+/* NAVEGACIÓN */
+function showStep(n) {
+  document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById('step-' + n);
+  if (card) card.classList.add('active');
+  currentStep = n;
+  renderProgress();
+  renderSummary();
+  actualizarLiveBar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext(from) {
+  if (from === 2 && estado.mesIncompleto) {
+    const total = Object.values(estado.diasPorCategoria).reduce((a,b)=>a+b,0);
+    if (total === 0) { alert('Introduce al menos un día trabajado.'); return; }
+    if (total > 30) { document.getElementById('modal').classList.add('show'); return; }
+  }
+  let next = from + 1;
+  const sinSuperiores = estado.mesIncompleto || categoriasSuperiores(estado.categoria).length === 0;
+  if (from === 2 && sinSuperiores) next = 4;
+  if (next === 3) renderDiasSuperiores();
+  if (next === 4) renderNocturnidad();
+  if (next === 5) { renderHorasExtras(); renderArrancadores(); }
+  if (next === 6) {
+    ['horasSabado8','horasSabado12','horasDomingo8','horasDomingo12'].forEach(k => {
+      document.getElementById('v-' + k).textContent = estado[k];
+    });
+    actualizarLiveBar();
+  }
+  showStep(next);
+  document.getElementById('resultCard').classList.remove('show');
+}
+
+function goBack(from) {
+  let prev = from - 1;
+  const sinSuperiores = estado.mesIncompleto || categoriasSuperiores(estado.categoria).length === 0;
+  if (from === 4 && sinSuperiores) prev = 2;
+  showStep(prev);
+  if (prev === 6) {
+    ['horasSabado8','horasSabado12','horasDomingo8','horasDomingo12'].forEach(k => {
+      document.getElementById('v-' + k).textContent = estado[k];
+    });
+    actualizarLiveBar();
+  }
+  document.getElementById('resultCard').classList.remove('show');
+}
+
+/* CÁLCULO */
+function calcularYMostrar() {
+  const res = calcular();
+  renderResultado(res);
+  document.getElementById('resultCard').classList.add('show');
+  document.getElementById('step-7').classList.remove('active');
+  document.getElementById('liveBar').classList.remove('show');
+  setTimeout(() => {
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function calcular() {
+  let totalBase = 0, totalComp = 0, totalDifGrupo = 0, totalDifNivel = 0;
+  let totalNoctBase = 0, totalNoctDif = 0;
+  let totalExtDiurBase = 0, totalExtNoctBase = 0;
+  let totalExtDiurDif = 0, totalExtNoctDif = 0;
+  let totalArr = 0, total4T = 0;
+  const desglose = [];
+
+  if (estado.mesIncompleto) {
+    Object.entries(estado.diasPorCategoria).forEach(([cat, dias]) => {
+      if (!dias) return;
+      totalBase += salarios[cat].base / 30 * dias;
+      totalComp += salarios[cat].complemento / 30 * dias;
+      desglose.push({ label: `${cat} (${dias} días)`, sub: true, amount: (salarios[cat].base + salarios[cat].complemento) / 30 * dias });
+    });
+  } else {
+    totalBase = salarios[estado.categoria].base;
+    totalComp = salarios[estado.categoria].complemento;
+    categoriasSuperiores(estado.categoria).forEach(cat => {
+      const dias = estado.diasTrabajados[cat];
+      if (!dias) return;
+      const dg = (salarios[cat].base - salarios[estado.categoria].base) / 30 * dias;
+      const dn = (salarios[cat].complemento - salarios[estado.categoria].complemento) / 30 * dias;
+      totalDifGrupo += dg;
+      totalDifNivel += dn;
+      desglose.push({ label: `Días en ${cat} (${dias}d)`, sub: true, amount: dg + dn });
+    });
+  }
+
+  const cats = estado.mesIncompleto
+    ? CATS_ORDER.filter(c => estado.diasPorCategoria[c] > 0)
+    : categoriasOrdenadas(estado.categoria);
+
+  cats.forEach(cat => {
+    const d = estado.nocturnidad[cat];
+    if (!d) return;
+    const base = estado.mesIncompleto ? preciosNocturnidad[cat] : preciosNocturnidad[estado.categoria];
+    const otra = preciosNocturnidad[cat];
+    totalNoctBase += d * base;
+    if (!estado.mesIncompleto && cat !== estado.categoria) totalNoctDif += d * (otra - base);
+  });
+
+  cats.forEach(cat => {
+    const he = estado.horasExtras[cat] || 0;
+    const hn = estado.horasNocturnas[cat] || 0;
+    const baseE = estado.mesIncompleto ? preciosExtras[cat].extra : preciosExtras[estado.categoria].extra;
+    const baseN = estado.mesIncompleto ? preciosExtras[cat].nocturna : preciosExtras[estado.categoria].nocturna;
+    totalExtDiurBase += he * baseE;
+    totalExtNoctBase += hn * baseN;
+    if (!estado.mesIncompleto && cat !== estado.categoria) {
+      totalExtDiurDif += he * (preciosExtras[cat].extra - baseE);
+      totalExtNoctDif += hn * (preciosExtras[cat].nocturna - baseN);
+    }
+  });
+
+  const arrCats = estado.categoria === 'C6' ? ['C6'] : ['C5','C6'];
+  arrCats.forEach(cat => {
+    totalArr += (estado.arrancadores[cat] || 0) * (preciosArrancadores[cat] || 0);
+  });
+
+  total4T += estado.horasSabado8 * precioSabado8;
+  total4T += estado.horasSabado12 * precioSabado12;
+  total4T += estado.horasDomingo8 * precioDomingo8;
+  total4T += estado.horasDomingo12 * precioDomingo12;
+
+  const totalPlus = estado.plusAsistencia ? precioPlusAsistencia : 0;
+  const totalAdsc = estado.adscripcion ? precioAdscripcion : 0;
+
+  const total = totalBase + totalComp + totalDifGrupo + totalDifNivel
+    + totalNoctBase + totalNoctDif
+    + totalExtDiurBase + totalExtNoctBase + totalExtDiurDif + totalExtNoctDif
+    + totalArr + total4T + totalPlus + totalAdsc;
+
+  return {
+    total,
+    totalBase, totalComp, totalDifGrupo, totalDifNivel,
+    totalNoctBase, totalNoctDif,
+    totalExtDiurBase, totalExtNoctBase, totalExtDiurDif, totalExtNoctDif,
+    totalArr, total4T, totalPlus, totalAdsc, desglose
+  };
+}
+
+function renderResultado(r) {
+  document.getElementById('res-total').textContent = r.total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  const chips = [];
+  if (estado.categoria) chips.push('Cat. ' + estado.categoria);
+  if (estado.mesIncompleto) chips.push('Mes incompleto');
+  if (r.totalNoctBase > 0) chips.push('Con nocturnidad');
+  if (r.total4T > 0) chips.push('4º turno');
+  if (r.totalPlus > 0) chips.push('Plus asistencia');
+  document.getElementById('res-chips').innerHTML = chips.map(c=>`<span class="result-chip">${c}</span>`).join('');
+
+  let html = '';
+  html += '<div class="result-section-title">Salario base y complementos</div>';
+  html += row('Salario base', r.totalBase);
+  html += row('Complemento de nivel', r.totalComp);
+  if (r.totalDifGrupo > 0) html += row('Diferencia de grupo', r.totalDifGrupo, true);
+  if (r.totalDifNivel > 0) html += row('Diferencia de nivel', r.totalDifNivel, true);
+
+  if (r.totalNoctBase + r.totalNoctDif > 0) {
+    html += '<div class="result-section-title">Nocturnidad</div>';
+    html += row('Nocturnidad base', r.totalNoctBase);
+    if (r.totalNoctDif > 0) html += row('Diferencia nocturnidad', r.totalNoctDif, true);
+  }
+
+  if (r.totalExtDiurBase + r.totalExtNoctBase > 0) {
+    html += '<div class="result-section-title">Horas extras</div>';
+    if (r.totalExtDiurBase > 0) html += row('H. extras diurnas', r.totalExtDiurBase);
+    if (r.totalExtDiurDif > 0) html += row('Diferencia diurnas', r.totalExtDiurDif, true);
+    if (r.totalExtNoctBase > 0) html += row('H. extras nocturnas', r.totalExtNoctBase);
+    if (r.totalExtNoctDif > 0) html += row('Diferencia nocturnas', r.totalExtNoctDif, true);
+  }
+
+  if (r.totalArr > 0) {
+    html += '<div class="result-section-title">Arrancadores</div>';
+    html += row('Total arrancadores', r.totalArr);
+  }
+
+  if (r.total4T > 0) {
+    html += '<div class="result-section-title">4º Turno</div>';
+    if (estado.horasSabado8) html += row(`Sábado 8h × ${estado.horasSabado8}`, estado.horasSabado8 * precioSabado8, true);
+    if (estado.horasSabado12) html += row(`Sábado 12h × ${estado.horasSabado12}`, estado.horasSabado12 * precioSabado12, true);
+    if (estado.horasDomingo8) html += row(`Domingo 8h × ${estado.horasDomingo8}`, estado.horasDomingo8 * precioDomingo8, true);
+    if (estado.horasDomingo12) html += row(`Domingo 12h × ${estado.horasDomingo12}`, estado.horasDomingo12 * precioDomingo12, true);
+    html += row('Subtotal 4º turno', r.total4T);
+  }
+
+  if (r.totalPlus > 0 || r.totalAdsc > 0) {
+    html += '<div class="result-section-title">Complementos</div>';
+    if (r.totalPlus > 0) html += row('Plus de asistencia', r.totalPlus);
+    if (r.totalAdsc > 0) html += row('Adscripción fin de semana', r.totalAdsc);
+  }
+
+  html += '<div class="result-divider"></div>';
+  html += `<div class="result-row" style="padding-top:4px;">
+    <span class="result-row-label" style="font-weight:700; color:var(--text); font-size:0.95rem;">Total bruto mensual</span>
+    <span class="result-row-amount" style="color:var(--rojo); font-size:1.05rem;">${fmt(r.total)}</span>
+  </div>`;
+  html += `<div style="margin-top:0.75rem; padding:0.75rem; background:var(--rojo-light); border:1px solid var(--rojo-mid); border-radius:8px; font-size:0.75rem; color:var(--rojo-dark); line-height:1.5;">
+    💡 Este cálculo es una estimación bruta. No incluye retenciones de IRPF ni cotizaciones a la Seguridad Social.
+  </div>`;
+
+  document.getElementById('res-body').innerHTML = html;
+}
+
+function row(label, amount, sub = false) {
+  return `<div class="result-row ${sub ? 'sub' : ''}">
+    <span class="result-row-label">${label}</span>
+    <span class="result-row-amount">${fmt(amount)}</span>
+  </div>`;
+}
+
+function reiniciar() {
+  Object.assign(estado, {
+    categoria: null, mesIncompleto: false,
+    diasPorCategoria: {B3:0,B4:0,C5:0,C6:0},
+    diasTrabajados: {B4:0,C5:0,C6:0},
+    nocturnidad: {B3:0,B4:0,C5:0,C6:0},
+    arrancadores: {C5:0,C6:0},
+    horasExtras: {B3:0,B4:0,C5:0,C6:0},
+    horasNocturnas: {B3:0,B4:0,C5:0,C6:0},
+    horasSabado8:0, horasSabado12:0, horasDomingo8:0, horasDomingo12:0,
+    plusAsistencia: false, adscripcion: false
+  });
+  document.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('toggle-plus').classList.remove('on');
+  document.getElementById('toggle-adscripcion').classList.remove('on');
+  document.getElementById('btn-next-1').disabled = true;
+  document.getElementById('btn-next-2').disabled = true;
+  document.getElementById('dias-incompleto-wrap').style.display = 'none';
+  document.getElementById('resultCard').classList.remove('show');
+  showStep(1);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderProgress();
+</script>
+</body>
+</html>
